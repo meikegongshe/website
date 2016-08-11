@@ -35,3 +35,12 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# WebStorm work directory
+.idea
+
+# glup generated javascript files
+public/js/*.js
+
+#glup generated css files
+public/js/*.css
