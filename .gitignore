@@ -39,8 +39,6 @@ jspm_packages
 # WebStorm work directory
 .idea
 
-# glup generated javascript files
-public/js/*.js
-
-#glup generated css files
-public/js/*.css
+#glup generated files
+public/javascripts/
+public/styles/
