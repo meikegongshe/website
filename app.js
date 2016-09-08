@@ -1,5 +1,4 @@
-var config = require('./config'),
-    express = require('express'),
+var express = require('express'),
     session = require('express-session'),
     path = require('path'),
     favicon = require('serve-favicon'),
@@ -8,7 +7,9 @@ var config = require('./config'),
     bodyParser = require('body-parser'),
     swig = require('swig'),
     log4js = require('log4js'),
-    lodash = require('lodash');
+    lodash = require('lodash'),
+    author = require('./components/authorization'),
+    server = require('./components/server');
 
 require('dotenv').config();
 
@@ -18,28 +19,28 @@ var logTypeConfigs = [];
 loggerTypes.forEach(function (type) {
     switch (type) {
         case 'console':
-            logTypeConfigs += {type: 'console'};
+            logTypeConfigs.push({type: 'console'});
             break;
 
         case 'file':
-            logTypeConfigs += {
+            logTypeConfigs.push({
                 type: 'file',
                 filename: __dirname + '/logs/log.txt',
                 category: 'general',
                 maxLogSize: 2048,
                 backups: 10
-            };
+            });
             break;
     }
 });
+
+console.log(logTypeConfigs);
 
 log4js.configure({appenders: logTypeConfigs});
 
 // global variables
 global.logger = log4js.getLogger();
 global.lodash = lodash;
-
-var routes = require('./routes');
 
 var app = express();
 
@@ -65,65 +66,24 @@ app.use(bodyParser.json({
     'limit': '1mb'
 }));
 
+var sessionSecret = 'E8FE115F3FE05D54331B2A9EC5B3EB79';
+
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser(config.session_secret));
+app.use(cookieParser(sessionSecret));
 app.use(session({
-    secret: config.session_secret,
+    secret: sessionSecret,
     store: new RedisStore({
-        port: config.redis_port,
-        host: config.redis_host
+        port: process.env.REDIS_PORT,
+        host: process.env.REDIS_HOST
     }),
     resave: true,
     saveUninitialized: true
 }));
 
-if (app.get('env') == 'development') {
-    app.use(express.static(path.join(__dirname, 'public')));
-    app.use(express.static(path.join(__dirname, 'data/cms')));
-    app.use(express.static(path.join(__dirname, 'src/public')));
-}
+app.use(express.static(path.join(__dirname, 'public')));
+author.initialize(app);
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-// TODO: remove password
-passport.serializeUser(function (user, done) {
-    done(null, user._id);
-});
-
-passport.deserializeUser(function (userId, done) {
-    if (!userId) {
-        return done(null, null);
-    }
-
-    Account.get(userId, function (err, user) {
-        if (err) {
-            return done(err);
-        }
-
-        done(null, user);
-    });
-});
-
-passport.use('local', new LocalStrategy(localStrategyMiddleware));
-
-app.use(busboy({
-    limits: {
-        fileSize: config.file_size_limit,
-        files: config.file_count_limit
-    }
-}));
-
-app.use(require('./middlewares/website')());
-app.use(require('./middlewares/activity_log'));
-
-// TODO: app uses the apikey to access protected pages, should we also limit those requests?
-app.use(require('./middlewares/auth').ensurePhonenumber);
-
-// set after the auth middleware.
-app.use(require('./middlewares/message').getUnreadCount);
-app.use(require('./middlewares/link').getLinks);
-
+var routes = require('./routes');
 app.use('/', routes);
 
 // catch 404 and forward to error handler
@@ -139,11 +99,13 @@ app.use(function (err, req, res, next) {
     // will print stacktrace
     // production error handler
     // no stacktraces leaked to user
+    logger.debug(err);
+
     if (err.status != 404) {
-        console.log(err.stack); // log the err.
+        logger.debug(err.stack); // log the err.
     }
 
-    return routes.errorHandler(err, {detail: app.get('env') == 'development'}, req, res, next);
+    return res.send(err.message);
 });
 
-module.exports = app;
+server(app);

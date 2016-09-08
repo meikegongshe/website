@@ -1,6 +1,3 @@
-var keystone = require('keystone');
-
-exports = module.exports = function (req, res) {
-    var view = new keystone.View(req, res);
-    view.render('index', {locals: {title: 'meike'}});
+exports = module.exports = function (req, res, next) {
+    res.render('index', {locals: {title: 'meike'}});
 }
