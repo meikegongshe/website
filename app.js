@@ -34,8 +34,6 @@ loggerTypes.forEach(function (type) {
     }
 });
 
-console.log(logTypeConfigs);
-
 log4js.configure({appenders: logTypeConfigs});
 
 // global variables
