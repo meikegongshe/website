@@ -1,14 +1,11 @@
-var keystone = require('keystone'),
-    Types = keystone.Field.Types;
+var mongoose = require('mongoose');
 
-var User = new keystone.List('User');
-
-User.add({
-    name: {type: Types.Name, required: true, index: true},
-    phone: {type: Types.Number, required: false, index: true},
-    email: {type: Types.Email, initial: true, required: true, index: true},
-    password: {type: Types.Password, initial: true},
-    canAccessKeystone: {type: Boolean, initial: true}
+var schema = new mongoose.Schema({
+    name: {type: String},
+    portrait: {type: String},
+    phone: {type: String},
+    parent: user,
+    added: {type: Date, default: Date.now}
 });
 
-User.register();
+mongoose.model('user', schema);
