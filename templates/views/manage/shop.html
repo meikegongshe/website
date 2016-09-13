@@ -1,0 +1,56 @@
+{% extends '../../layouts/manage.html' %}
+
+{% block manage_content %}
+
+<div class="aui-content aui-margin-b-15">
+    <ul class="aui-list aui-form-list">
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-label">
+                    名称
+                </div>
+                <div class="aui-list-item-input">
+                    <input type="text" placeholder="名称">
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-label">
+                    简介
+                </div>
+                <div class="aui-list-item-input">
+                    <textarea placeholder="简介"></textarea>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-label">
+                    电话号码
+                </div>
+                <div class="aui-list-item-input">
+                    <input type="text" placeholder="电话号码">
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-label">
+                    地址
+                </div>
+                <div class="aui-list-item-input">
+                    <input type="text" placeholder="地址">
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<footer class="aui-bar aui-bar-tab" id="footer">
+    <a class="aui-bar-tab-item aui-active" href="/manage" tapmode>
+        保 存
+    </a>
+</footer>
+
+{% endblock %}

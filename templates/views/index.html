@@ -1,9 +1,13 @@
 {% extends '../layouts/base.html' %}
 
-{% block title %}index {{title}} {%endblock%}
-
 {% block content %}
-<header class="aui-bar aui-bar-nav">美客公社</header>
+<header class="aui-bar aui-bar-nav">
+    <div class="aui-title">{{title}}</div>
+    <a class="aui-pull-right aui-btn" href="/manage">
+        <span class="aui-iconfont aui-icon-gear"></span>
+    </a>
+</header>
+
 <section class="aui-content">
     <img src="http://img.jdzj.com/UserDocument/2013c/chenjianmo/Picture/201392910266.jpg" style="width: 100%"/>
 </section>

@@ -1,0 +1,42 @@
+{% extends '../../layouts/manage.html' %}
+
+{% block manage_content %}
+
+<ul class="aui-list aui-list-in">
+    <li class="aui-list-header">商铺管理</li>
+    <li class="aui-list-item" onclick="location.href='/manage/shop'">
+        <div class="aui-list-item-label-icon">
+            <i class="aui-iconfont aui-icon-cert"></i>
+        </div>
+        <div class="aui-list-item-inner">
+            <div class="aui-list-item-title">基本信息</div>
+            <div class="aui-list-item-right">
+                <i class="aui-iconfont aui-icon-right"></i>
+            </div>
+        </div>
+    </li>
+    <li class="aui-list-item">
+        <div class="aui-list-item-label-icon">
+            <i class="aui-iconfont aui-icon-my"></i>
+        </div>
+        <div class="aui-list-item-inner">
+            <div class="aui-list-item-title">人员管理</div>
+            <div class="aui-list-item-right">
+                <i class="aui-iconfont aui-icon-right"></i>
+            </div>
+        </div>
+    </li>
+    <li class="aui-list-item">
+        <div class="aui-list-item-label-icon">
+            <i class="aui-iconfont aui-icon-cart"></i>
+        </div>
+        <div class="aui-list-item-inner">
+            <div class="aui-list-item-title">商品管理</div>
+            <div class="aui-list-item-right">
+                <i class="aui-iconfont aui-icon-right"></i>
+            </div>
+        </div>
+    </li>
+</ul>
+
+{% endblock %}

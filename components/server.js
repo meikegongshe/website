@@ -7,7 +7,6 @@ exports = module.exports = function (app, options) {
     }
 
     var options = options || {};
-    var debug = require('debug')('website:server');
     var http = require('http');
 
     var env = process.env.NODE_ENV || 'development';
@@ -24,22 +23,6 @@ exports = module.exports = function (app, options) {
 
     server.on('error', options.onError || onError);
     server.on('listening', options.onListening || onListening);
-
-    function normalizePort(val) {
-        var port = parseInt(val, 10);
-
-        if (isNaN(port)) {
-            // named pipe
-            return val;
-        }
-
-        if (port >= 0) {
-            // port number
-            return port;
-        }
-
-        return false;
-    }
 
     function onError(error) {
         if (error.syscall !== 'listen') {

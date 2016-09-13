@@ -26,8 +26,7 @@ loggerTypes.forEach(function (type) {
             logTypeConfigs.push({
                 type: 'file',
                 filename: __dirname + '/logs/log.txt',
-                category: 'general',
-                maxLogSize: 2048,
+                maxLogSize: 204800,
                 backups: 10
             });
             break;
