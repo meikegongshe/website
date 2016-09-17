@@ -10,4 +10,4 @@ var schema = new mongoose.Schema({
     added: {type: Date, default: Date.now}
 });
 
-mongoose.model('service', schema);
+mongoose.model('staff', schema);

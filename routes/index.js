@@ -8,11 +8,7 @@ router.use(function (req, res, next) {
     next();
 });
 
-router.get('/', function (req, res) {
-    return res.render('index', {
-        title: '美客公社'
-    });
-});
+router.get('/', require('./views/shop'));
 
 router.use('/manage', manage);
 

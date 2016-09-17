@@ -4,7 +4,7 @@ var schema = new mongoose.Schema({
     name: {type: String},
     portrait: {type: String},
     phone: {type: String},
-    parent: user,
+    parent: [{type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
     added: {type: Date, default: Date.now}
 });
 

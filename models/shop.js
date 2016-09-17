@@ -17,6 +17,7 @@ var schema = new mongoose.Schema({
 
 schema.pre('save', function (next) {
     this.updated = Date.now;
+    next();
 });
 
 mongoose.model('shop', schema);
