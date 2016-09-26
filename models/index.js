@@ -7,6 +7,8 @@ mongoose.connect(process.env.MONGO_URI, function (err) {
     }
 });
 
+mongoose.Promise = require('q').Promise;
+
 require('./shop');
 require('./service');
 require('./staff');

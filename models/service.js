@@ -4,10 +4,10 @@ var mongoose = require('mongoose'),
 var schema = new mongoose.Schema({
     name: {type: String},
     type: {type: String},
-    price: {type: String},
-    original: {type: String},
+    price: {type: Number},
+    original: {type: Number},
     intro: {type: String},
-    staffs: [staff],
+    staffs: [{type: mongoose.Schema.Types.ObjectId, ref: 'staff'}],
     enabled: {type: Boolean, default: true},
     added: {type: Date, default: Date.now}
 });

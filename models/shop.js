@@ -7,10 +7,11 @@ var schema = new mongoose.Schema({
     intro: {type: String},
     phone: {type: String},
     address: {type: String},
-    location: {type: String},
+    location_x: {type: Number},
+    location_y: {type: Number},
     images: [{type: String}],
-    services: [service],
-    staffs: [staff],
+    services: [{type: mongoose.Schema.Types.ObjectId, ref: 'service'}],
+    staffs: [{type: mongoose.Schema.Types.ObjectId, ref: 'staff'}],
     added: {type: Date, default: Date.now},
     updated: {type: Date, default: Date.now}
 });

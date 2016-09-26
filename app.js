@@ -80,6 +80,17 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 author.initialize(app);
 
+// init data
+app.use(function (req, res, next) {
+    require('./updates/1.0.0.js')(function (err) {
+        if (err) {
+            logger.debug(err);
+        }
+
+        next();
+    });
+});
+
 var routes = require('./routes');
 app.use('/', routes);
 

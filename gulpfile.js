@@ -17,7 +17,10 @@ gulp.task('style', function () {
 })
 
 gulp.task('javascript', function () {
-    var src = gulp.src(jsSrc + 'app.js')
+    var src = gulp.src(jsSrc + 'aui/*')
+        .pipe(gulp.dest(jsDest + 'aui'));
+
+    src = gulp.src(jsSrc + 'app.js')
         .pipe(webpack({
             module: {
                 loaders: [
