@@ -1,0 +1,43 @@
+{% extends '../../layouts/base.html' %}
+{% import '../../macros/slide.html' as m_slide %}
+{% import '../../macros/shop.html' as m_shop %}
+
+{% block content %}
+<header class="aui-bar aui-bar-nav">
+    <a class="aui-pull-left aui-btn" href="javascript:history.back()">
+        <span class="aui-iconfont aui-icon-left"></span>
+    </a>
+
+    <div class="aui-title">{{ title }}</div>
+</header>
+
+<section class="aui-content">
+    {{ m_slide.slide('page-slide') }}
+</section>
+
+<section class="aui-content">
+    <ul class="aui-list aui-list-in">
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-title" style="font-weight: bold;color: #d23131">￥ {{ service.price }}</div>
+                <div class="aui-list-item-right">原价：<s>{{ service.original }}</s></div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-title">{{ service.intro }}</div>
+            </div>
+        </li>
+    </ul>
+</section>
+
+<section class="aui-content">
+    {{ m_shop.staff_list('staff_list', service.staffs) }}
+</section>
+
+<footer class="aui-bar aui-bar-tab" id="footer">
+    <div class="aui-bar-tab-item aui-active" tapmode>
+        <div class="aui-bar-btn-full">我要预约</div>
+    </div>
+</footer>
+{% endblock %}

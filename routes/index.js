@@ -1,6 +1,7 @@
 var express = require('express'),
     router = express.Router(),
-    manage = require('./views/manage');
+    manage = require('./views/manage'),
+    shop = require('./views/shop');
 
 router.use(function (req, res, next) {
     logger.debug(req.method + ': ' + req.path);
@@ -8,7 +9,8 @@ router.use(function (req, res, next) {
     next();
 });
 
-router.get('/', require('./views/shop'));
+router.get('/', shop);
+router.get('/service/:id', shop.service);
 
 router.use('/manage', manage);
 

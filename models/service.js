@@ -4,6 +4,8 @@ var mongoose = require('mongoose'),
 var schema = new mongoose.Schema({
     name: {type: String},
     type: {type: String},
+    icon: {type: String},
+    images: [{type: String}],
     price: {type: Number},
     original: {type: Number},
     intro: {type: String},

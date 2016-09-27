@@ -1,0 +1,38 @@
+{% macro staff_list(id, staffs) %}
+<div class="aui-card-list" id="{{ id }}">
+    <div class="aui-card-list-content-padded aui-border-b aui-border-t">
+        <div class="aui-row aui-row-padded">
+            {% for staff in staffs %}
+            <div class="aui-col-xs-3">
+                <img src="{{ staff.portrait }}"
+                     class="aui-img-round" style="width:100%; padding: 5px;"/>
+                <div class="aui-list-item-title" style="text-align: center">
+                    {{ staff.name }}
+                </div>
+                <div class="aui-list-item-text" style="text-align: center;font-size: 12px;color: #666;">
+                    {{ staff.title }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro service_list(id, services) %}
+<ul class="aui-list aui-media-list" id="{{ id }}">
+    {% for service in services %}
+    <li class="aui-list-item aui-list-item-middle" data-id="{{ service._id }}">
+        <div class="aui-media-list-item-inner">
+            <div class="aui-list-item-media" style="width: 3rem;">
+                <img src="{{ service.icon }}"
+                     class="aui-img-round aui-list-img-sm">
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                {{ service.name }}
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endmacro %}
