@@ -1,0 +1,64 @@
+{% extends '../../layouts/base.html' %}
+{% import '../../macros/common.html' as m_common %}
+
+{% block content %}
+{{ m_common.header('page_header', title) }}
+
+<section class="aui-content">
+    <div class="aui-info aui-margin-t-10 aui-padded-l-10 aui-padded-r-10">
+        <div class="aui-info-item">
+            <img src="{{ account.portrait }}" style="width:3rem" class="aui-img-round"/><span class="aui-margin-l-5">{{ account.name }}</span>
+        </div>
+        <a class="aui-info-item" style="color: crimson; font-size: 12px;">修改我的资料</a>
+    </div>
+</section>
+
+<section class="aui-grid">
+    <div class="aui-row">
+        <div class="aui-col-xs-4">
+            <i class="aui-iconfont aui-icon-flag"></i>
+
+            <div class="aui-grid-label">积分：{{ account.points }}</div>
+        </div>
+        <div class="aui-col-xs-4">
+            <i class="aui-iconfont aui-icon-cart"></i>
+
+            <div class="aui-grid-label">消费：{{ account.records }}</div>
+        </div>
+        <div class="aui-col-xs-4">
+            <i class="aui-iconfont aui-icon-share"></i>
+
+            <div class="aui-grid-label">下级会员：{{ account.children.length }}</div>
+        </div>
+    </div>
+</section>
+
+<section class="aui-content" style="background-color: #e0e0e0">
+    <div class="aui-info aui-padded-l-10 aui-padded-r-10">
+        <div class="aui-info-item">
+            <span class="aui-margin-l-5">我的订单</span>
+        </div>
+        <a class="aui-info-item"><i class="aui-iconfont aui-icon-right"></i></a>
+    </div>
+</section>
+
+<section class="aui-grid">
+    <div class="aui-row">
+        <div class="aui-col-xs-4">
+            <i class="aui-iconfont aui-icon-date"></i>
+
+            <div class="aui-grid-label">未支付</div>
+        </div>
+        <div class="aui-col-xs-4">
+            <i class="aui-iconfont aui-icon-cert"></i>
+
+            <div class="aui-grid-label">已支付</div>
+        </div>
+        <div class="aui-col-xs-4">
+            <i class="aui-iconfont aui-icon-calendar"></i>
+
+            <div class="aui-grid-label">日 历</div>
+        </div>
+    </div>
+</section>
+{% endblock %}

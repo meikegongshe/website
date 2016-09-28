@@ -1,10 +1,10 @@
 var mongoose = require('mongoose'),
-    user = require('./user'),
+    user = require('./account'),
     service = require('./service');
 
 var schema = new mongoose.Schema({
-    user: user,
-    service: service,
+    account: {type: mongoose.Schema.Types.ObjectId, ref: 'account'},
+    service: {type: mongoose.Schema.Types.ObjectId, ref: 'service'},
     price: {type: String},
     state: {type: String},
     paid: {type: Date},

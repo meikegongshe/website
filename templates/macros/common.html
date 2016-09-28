@@ -1,0 +1,13 @@
+{% macro header(id, title) %}
+<header class="aui-bar aui-bar-nav">
+    <a class="aui-pull-left aui-btn" href="javascript:history.back()">
+        <span class="aui-iconfont aui-icon-left"></span>
+    </a>
+
+    <div class="aui-title">{{ title }}</div>
+
+    <a class="aui-pull-right aui-btn" href="/account">
+        <span class="aui-iconfont aui-icon-my"></span>
+    </a>
+</header>
+{% endmacro %}

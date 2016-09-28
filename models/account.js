@@ -6,7 +6,9 @@ var schema = new mongoose.Schema({
     portrait: {type: String},
     phone: {type: String},
     parent: [{type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
+    points: {type: Number, default: 0},
+    records: {type: Number, default: 0},
     added: {type: Date, default: Date.now}
 });
 
-mongoose.model('user', schema);
+mongoose.model('account', schema);

@@ -1,15 +1,10 @@
 {% extends '../../layouts/base.html' %}
+{% import '../../macros/common.html' as m_common %}
 {% import '../../macros/slide.html' as m_slide %}
 {% import '../../macros/shop.html' as m_shop %}
 
 {% block content %}
-<header class="aui-bar aui-bar-nav">
-    <a class="aui-pull-left aui-btn" href="javascript:history.back()">
-        <span class="aui-iconfont aui-icon-left"></span>
-    </a>
-
-    <div class="aui-title">{{ title }}</div>
-</header>
+{{ m_common.header('page_header', title) }}
 
 <section class="aui-content">
     {{ m_slide.slide('page-slide') }}
