@@ -25,6 +25,7 @@ var account = {
 exports = module.exports = exports.index = function (req, res) {
     return res.render('account/index', {
         title: '个人信息',
-        account: account
+        account: account,
+        footer_index: 4
     })
 };

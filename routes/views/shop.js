@@ -66,6 +66,10 @@ var services = [
 
 var shop = {
     name: '美客公社',
+    address: '我也不知道这是个什么地址',
+    phone: '18201123448',
+    location_x: 22.517676,
+    location_y: 113.935593,
     services: services,
     staffs: staffs
 }
@@ -76,7 +80,7 @@ exports = module.exports = exports.index = function (req, res) {
 
      return res.render('index', getViewModel(data));
      });*/
-    return res.render('index', {
+    return res.render('shop/index', {
         title: '美客公社',
         shop: shop
     });

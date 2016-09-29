@@ -1,8 +1,6 @@
-{% extends '../../layouts/base.html' %}
-{% import '../../macros/common.html' as m_common %}
+{% extends '../../layouts/page.html' %}
 
-{% block content %}
-{{ m_common.header('page_header', title) }}
+{% block page_content %}
 
 <section class="aui-content">
     <div class="aui-info aui-margin-t-10 aui-padded-l-10 aui-padded-r-10">
@@ -57,7 +55,7 @@
         <div class="aui-col-xs-4">
             <i class="aui-iconfont aui-icon-calendar"></i>
 
-            <div class="aui-grid-label">日 历</div>
+            <div class="aui-grid-label">未消费</div>
         </div>
     </div>
 </section>

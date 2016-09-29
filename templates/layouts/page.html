@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% import '../macros/common.html' as m_common %}
+
+{% block head %}
+<script type="text/javascript" src="/javascripts/aui/aui-tab.js" ></script>
+{% endblock %}
+
+{% block content %}
+
+{% block page_content %}{% endblock %}
+
+<div style="margin-bottom: 50px;"></div>
+
+{% block page_footer %}
+
+{{ m_common.footer('page_footer') }}
+
+<script type="text/javascript">
+    var tab = new auiTab({
+        element:document.getElementById("page_footer"),
+        index:{{ footer_index || 1 }},
+        repeatClick:false
+    },function(ret){
+        switch(ret.index){
+            default:
+            case 1:
+                location.href = '/';
+                break;
+
+            case 2:
+                location.href = '/commune';
+                break;
+
+            case 3:
+                location.href = '/mall';
+                break;
+
+            case 4:
+                location.href = '/account';
+                break;
+        }
+    });
+</script>
+
+{% block page_footer %}
+
+{% endblock %}

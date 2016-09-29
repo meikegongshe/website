@@ -1,10 +1,8 @@
-{% extends '../../layouts/base.html' %}
-{% import '../../macros/common.html' as m_common %}
+{% extends '../../layouts/page.html' %}
 {% import '../../macros/slide.html' as m_slide %}
 {% import '../../macros/shop.html' as m_shop %}
 
-{% block content %}
-{{ m_common.header('page_header', title) }}
+{% block page_content %}
 
 <section class="aui-content">
     {{ m_slide.slide('page-slide') }}
@@ -30,6 +28,9 @@
     {{ m_shop.staff_list('staff_list', service.staffs) }}
 </section>
 
+{% endblock %}
+
+{% block page_footer %}
 <footer class="aui-bar aui-bar-tab" id="footer">
     <div class="aui-bar-tab-item aui-active" tapmode>
         <div class="aui-bar-btn-full">我要预约</div>

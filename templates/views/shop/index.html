@@ -1,0 +1,39 @@
+{% extends '../../layouts/page.html' %}
+{% import '../../macros/slide.html' as m_slide %}
+{% import '../../macros/shop.html' as m_shop %}
+
+{% block page_content %}
+
+<section class="aui-content">
+    {{ m_slide.slide('page-slide') }}
+</section>
+
+<section class="aui-content">
+    <ul class="aui-list aui-list-in">
+        <li class="aui-list-item" onclick="location.href='http://apis.map.qq.com/tools/poimarker?type=0&marker=coord:{{ shop.location_x }},{{ shop.location_y }};title:{{ shop.name }};addr:{{ shop.address }}&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp'">
+            <div class="aui-list-item-label-icon">
+                <i class="aui-iconfont aui-icon-location"></i>
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                {{ shop.address }}
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-label-icon">
+                <i class="aui-iconfont aui-icon-phone"></i>
+            </div>
+            <div class="aui-list-item-inner">
+                <a href="tel://{{ shop.phone }}">{{ shop.phone }}</a>
+            </div>
+        </li>
+    </ul>
+</section>
+
+<section class="aui-content">
+    {{ m_shop.staff_list('staff_list', shop.staffs) }}
+</section>
+
+<section class="aui-content">
+    {{ m_shop.service_list('service_list', shop.services) }}
+</section>
+{% endblock %}

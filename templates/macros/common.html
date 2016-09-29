@@ -1,5 +1,5 @@
 {% macro header(id, title) %}
-<header class="aui-bar aui-bar-nav">
+<header class="aui-bar aui-bar-nav" id="{{ id }}">
     <a class="aui-pull-left aui-btn" href="javascript:history.back()">
         <span class="aui-iconfont aui-icon-left"></span>
     </a>
@@ -10,4 +10,45 @@
         <span class="aui-iconfont aui-icon-my"></span>
     </a>
 </header>
+{% endmacro %}
+
+{% macro footer(id) %}
+<footer class="aui-bar aui-bar-tab" id="{{ id }}">
+    <div class="aui-bar-tab-item aui-active" tapmode>
+        <i class="aui-iconfont aui-icon-home"></i>
+
+        <div class="aui-bar-tab-label">首页</div>
+    </div>
+    <div class="aui-bar-tab-item" tapmode>
+        <i class="aui-iconfont aui-icon-paper"></i>
+
+        <div class="aui-bar-tab-label">发现</div>
+    </div>
+    <div class="aui-bar-tab-item" tapmode>
+        <i class="aui-iconfont aui-icon-cart"></i>
+
+        <div class="aui-bar-tab-label">商城</div>
+    </div>
+    <div class="aui-bar-tab-item" tapmode>
+        <i class="aui-iconfont aui-icon-my"></i>
+
+        <div class="aui-bar-tab-label">我的</div>
+    </div>
+</footer>
+{% endmacro %}
+
+{% macro build %}
+<section class="aui-content-padded">
+    <div class="aui-card-list">
+        <div class="aui-card-list-header">
+            网站建设中...
+        </div>
+        <div class="aui-card-list-content-padded">
+            记得常回来看看，惊喜不断
+        </div>
+        <div class="aui-card-list-footer">
+            关注我们，关注美丽
+        </div>
+    </div>
+</section>
 {% endmacro %}
