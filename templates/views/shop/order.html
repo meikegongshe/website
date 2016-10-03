@@ -1,0 +1,72 @@
+{% extends '../../layouts/page.html' %}
+{% import '../../macros/shop.html' as m_shop %}
+
+{% block page_content %}
+
+<div class="aui-content">
+    <ul class="aui-list aui-list-in aui-margin-b-15">
+        <li class="aui-list-item aui-bg-default">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-title">{{ service.name }}</div>
+                <div class="aui-list-item-right">￥ {{ service.price }}</div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-label">
+                    数量
+                </div>
+                <div class="aui-list-item-right" style="max-width: 50%">
+                    <div class="aui-btn">-</div>
+                    <span>1</span>
+
+                    <div class="aui-btn">+</div>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-label">
+                    小计
+                </div>
+                <div class="aui-list-item-right">
+                    {{ service.price }}
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <ul class="aui-list aui-list-in">
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <input type="text" placeholder="请输入手机号码" style="width: auto">
+
+                <div class="aui-btn">发送验证码</div>
+            </div>
+        </li>
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-label">
+                    验证码
+                </div>
+                <div class="aui-list-item-input">
+                    <input type="text" placeholder="请输入验证码">
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <div class="aui-content-padded">
+        <div class="aui-info">
+            <div class="aui-info-item">
+                <span class="aui-margin-l-5 aui-text-danger"></span>
+            </div>
+        </div>
+
+        <div class="aui-btn aui-btn-block aui-btn-primary" data-type="order_confirm">提交订单</div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block page_footer %}{% endblock %}

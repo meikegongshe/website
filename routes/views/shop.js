@@ -65,9 +65,14 @@ var services = [
 ];
 
 var shop = {
-    name: '美客公社',
+    _id: 100,
+    name: '美客公社旗舰店',
+    intro: '这里是一段基本的商铺介绍，我觉得还是应该有一个简单的介绍的，以后支持详情了，可以点开更多查看。',
     address: '我也不知道这是个什么地址',
-    phone: '18201123448',
+    phone: '12345678901',
+    images: ['http://img.jdzj.com/UserDocument/2013c/chenjianmo/Picture/201392910266.jpg',
+        'http://img.jdzj.com/UserDocument/2013c/chenjianmo/Picture/201392910266.jpg',
+        'http://img.jdzj.com/UserDocument/2013c/chenjianmo/Picture/201392910266.jpg'],
     location_x: 22.517676,
     location_y: 113.935593,
     services: services,
@@ -81,7 +86,7 @@ exports = module.exports = exports.index = function (req, res) {
      return res.render('index', getViewModel(data));
      });*/
     return res.render('shop/index', {
-        title: '美客公社',
+        title: shop.name,
         shop: shop
     });
 };
@@ -93,3 +98,25 @@ exports.service = function (req, res) {
         service: service
     })
 };
+
+exports.order = function (req, res) {
+    var service = lodash.find(services, {_id: parseInt(req.params.id)});
+    return res.render('shop/order', {
+        title: '提交订单',
+        service: service
+    });
+};
+
+exports.order_post = function (req, res) {
+    // TODO: add handling logic
+    var order_id = 100;
+    return res.redirect('/shop/pay/') + order_id;
+};
+
+exports.pay = function (req, res) {
+    return res.render('shop/pay', {
+        title: '支付订单'
+    })
+};
+
+exports._shop = shop;

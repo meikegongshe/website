@@ -1,24 +1,26 @@
-{% extends '../layouts/base.html' %}
-{% import '../macros/slide.html' as m_slide %}
-{% import '../macros/shop.html' as m_shop %}
+{% extends '../layouts/page.html' %}
 
-{% block content %}
-<header class="aui-bar aui-bar-nav">
-    <div class="aui-title">{{title}}</div>
-    <a class="aui-pull-right aui-btn" href="/account">
-        <span class="aui-iconfont aui-icon-my"></span>
-    </a>
-</header>
+{% macro shop_card(shop) %}
 
-<section class="aui-content">
-    {{ m_slide.slide('page-slide') }}
-</section>
+<div class="aui-card-list" data-type="shop" data-id="{{ shop._id }}">
+    <div class="aui-card-list-content">
+        <img src="{{ shop.images[0] }}"/>
+    </div>
+    <div class="aui-card-list-footer">
+        {{ shop.name }}
+    </div>
+</div>
 
-<section class="aui-content">
-    {{ m_shop.staff_list('staff_list', shop.staffs) }}
-</section>
+{% endmacro %}
 
-<section class="aui-content">
-    {{ m_shop.service_list('service_list', shop.services) }}
-</section>
+{% block page_content %}
+
+<div class="aui-content">
+    {% for shop in shops %}
+
+    {{ shop_card(shop) }}
+
+    {% endfor %}
+</div>
+
 {% endblock %}

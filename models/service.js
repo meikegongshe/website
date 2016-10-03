@@ -6,6 +6,7 @@ var schema = new mongoose.Schema({
     type: {type: String},
     icon: {type: String},
     images: [{type: String}],
+    duration: {type: Number},
     price: {type: Number},
     original: {type: Number},
     intro: {type: String},

@@ -1,0 +1,25 @@
+{% extends '../../layouts/page.html' %}
+
+{% block page_content %}
+
+<section class="ui-content">
+    <div class="aui-grid aui-margin-b-15">
+        <div class="aui-row-padded">
+            <div class="aui-col-xs-6 aui-bg-default" style="border-bottom: solid 1px #eee;"><h4>用户名</h4></div>
+            <div class="aui-col-xs-3 aui-bg-default" style="border-bottom: solid 1px #eee;"><h4>消费额</h4></div>
+            <div class="aui-col-xs-3 aui-bg-default" style="border-bottom: solid 1px #eee;"><h4>下级会员</h4></div>
+        </div>
+        {% for member in members %}
+        <div class="aui-row-padded">
+            <div class="aui-col-xs-6 aui-ellipsis-1" style="border-bottom: solid 1px #eee;"><p>{{ member.name }}</p>
+            </div>
+            <div class="aui-col-xs-3" style="border-bottom: solid 1px #eee;"><p>{{ member.records }}</p></div>
+            <div class="aui-col-xs-3" style="border-bottom: solid 1px #eee;"><p>{{ member.members.length }}</p></div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block page_footer %}{% endblock %}
