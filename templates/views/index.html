@@ -2,7 +2,7 @@
 
 {% macro shop_card(shop) %}
 
-<div class="aui-card-list" data-type="shop" data-id="{{ shop._id }}">
+<div class="aui-card-list" data-type="shop" data-id="{{ shop._id.toString() }}">
     <div class="aui-card-list-content">
         <img src="{{ shop.images[0] }}"/>
     </div>

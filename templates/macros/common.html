@@ -52,3 +52,28 @@
     </div>
 </section>
 {% endmacro %}
+
+{% macro manager_footer(id) %}
+<footer class="aui-bar aui-bar-tab" id="{{ id }}">
+    <div class="aui-bar-tab-item aui-active" tapmode>
+        <i class="aui-iconfont aui-icon-home"></i>
+
+        <div class="aui-bar-tab-label">添加店铺</div>
+    </div>
+    <div class="aui-bar-tab-item" tapmode>
+        <i class="aui-iconfont aui-icon-paper"></i>
+
+        <div class="aui-bar-tab-label">发现</div>
+    </div>
+    <div class="aui-bar-tab-item" tapmode>
+        <i class="aui-iconfont aui-icon-cart"></i>
+
+        <div class="aui-bar-tab-label">商城</div>
+    </div>
+    <div class="aui-bar-tab-item" tapmode>
+        <i class="aui-iconfont aui-icon-my"></i>
+
+        <div class="aui-bar-tab-label">我的</div>
+    </div>
+</footer>
+{% endmacro %}

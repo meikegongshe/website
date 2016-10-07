@@ -5,7 +5,7 @@
 {% block page_content %}
 
 <section class="aui-content">
-    {{ m_slide.slide('page-slide') }}
+    {{ m_slide.slide('page-slide', service.images) }}
 </section>
 
 <section class="aui-content">
@@ -35,7 +35,7 @@
 <div style="margin-bottom: 50px;"></div>
 
 <footer class="aui-bar aui-bar-tab">
-    <div class="aui-bar-tab-item aui-active" data-type="order" data-id="{{ service._id }}" tapmode>
+    <div class="aui-bar-tab-item aui-active" data-type="order" data-id="{{ service._id.toString() }}" tapmode>
         <div class="aui-bar-btn-full">我要预约</div>
     </div>
 </footer>

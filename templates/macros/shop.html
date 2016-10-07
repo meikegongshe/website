@@ -22,7 +22,7 @@
 {% macro service_list(id, services) %}
 <ul class="aui-list aui-media-list" id="{{ id }}">
     {% for service in services %}
-    <li class="aui-list-item aui-list-item-middle" data-id="{{ service._id }}">
+    <li class="aui-list-item aui-list-item-middle" data-id="{{ service._id.toString() }}">
         <div class="aui-media-list-item-inner">
             <div class="aui-list-item-media" style="width: 3rem;">
                 <img src="{{ service.icon }}"

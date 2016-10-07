@@ -2,53 +2,134 @@
 
 {% block manage_content %}
 
-<div class="aui-content aui-margin-b-15">
-    <ul class="aui-list aui-form-list">
-        <li class="aui-list-item">
-            <div class="aui-list-item-inner">
-                <div class="aui-list-item-label">
-                    名称
+<form data-type="shop-form" method="post" target="_self">
+    <div class="aui-content aui-margin-b-15">
+        <ul class="aui-list aui-form-list">
+            <li class="aui-list-header">
+                基本信息
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        名称
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="name" type="text" value="{{ shop.name }}" placeholder="名称">
+                    </div>
                 </div>
-                <div class="aui-list-item-input">
-                    <input type="text" placeholder="名称">
+            </li>
+            <!--<li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        简介
+                    </div>
+                    <div class="aui-list-item-input">
+                        <textarea placeholder="简介"></textarea>
+                    </div>
                 </div>
-            </div>
-        </li>
-        <li class="aui-list-item">
-            <div class="aui-list-item-inner">
-                <div class="aui-list-item-label">
-                    简介
+            </li>-->
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        电话号码
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="phone" type="text" value="{{ shop.phone }}" placeholder="电话号码">
+                    </div>
                 </div>
-                <div class="aui-list-item-input">
-                    <textarea placeholder="简介"></textarea>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        地址
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="address" type="text" value="{{ shop.address }}" placeholder="地址">
+                    </div>
                 </div>
-            </div>
-        </li>
-        <li class="aui-list-item">
-            <div class="aui-list-item-inner">
-                <div class="aui-list-item-label">
-                    电话号码
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        位置坐标 X
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="location_x" type="text" value="{{ shop.location_x }}" placeholder="位置坐标 X">
+                    </div>
                 </div>
-                <div class="aui-list-item-input">
-                    <input type="text" placeholder="电话号码">
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        位置坐标 Y
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="location_y" type="text" value="{{ shop.location_y }}" placeholder="位置坐标 Y">
+                    </div>
                 </div>
-            </div>
-        </li>
-        <li class="aui-list-item">
-            <div class="aui-list-item-inner">
-                <div class="aui-list-item-label">
-                    地址
+            </li>
+            <li class="aui-list-header">
+                展示图片
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        图片 1
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="image1" type="text" {% if shop %}value="{{ shop.images[0] }}"{% endif %} placeholder="图片地址">
+                    </div>
                 </div>
-                <div class="aui-list-item-input">
-                    <input type="text" placeholder="地址">
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        图片 2
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="image2" type="text" {% if shop %}value="{{ shop.images[1] }}"{% endif %} placeholder="图片地址">
+                    </div>
                 </div>
-            </div>
-        </li>
-    </ul>
-</div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        图片 3
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="image3" type="text" {% if shop %}value="{{ shop.images[2] }}"{% endif %} placeholder="图片地址">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        图片 4
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="image4" type="text" {% if shop %}value="{{ shop.images[3] }}"{% endif %} placeholder="图片地址">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        图片 5
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="image5" type="text" {% if shop %}value="{{ shop.images[4] }}"{% endif %} placeholder="图片地址">
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% if shop %}
+    <input name="_id" type="hidden" value="{{ shop._id }}">
+    {% endif %}
+</form>
 
 <footer class="aui-bar aui-bar-tab" id="footer">
-    <a class="aui-bar-tab-item aui-active" href="/manage" tapmode>
+    <a class="aui-bar-tab-item aui-active" data-type="shop-confirm" tapmode>
         保 存
     </a>
 </footer>

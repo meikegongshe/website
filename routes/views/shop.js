@@ -1,4 +1,4 @@
-//var model = require('../../models');
+var models = require('../../models');
 
 var service_intro = '我就是一段介绍文字，为了充斥版面，但是又不知道要写什么，于是我很纠结。纠结的我牙疼，于是我去刷了一下牙，结果，流血了。哭哭哭。我刷完牙，回来看到这段文字，还是不知道些什么，于是回去睡了。';
 
@@ -80,43 +80,56 @@ var shop = {
 }
 
 exports = module.exports = exports.index = function (req, res) {
-    /*model.shop.findOne(function (err, data) {
-     if (err || !data)return next(err);
+    models.shop.findOne({_id: req.params.id})
+        .populate(['staffs', 'services'])
+        .exec(function (err, shop) {
+            if (err)return next(err);
 
-     return res.render('index', getViewModel(data));
-     });*/
-    return res.render('shop/index', {
-        title: shop.name,
-        shop: shop
-    });
+            return res.render('shop/index', {
+                title: shop.name,
+                shop: shop
+            });
+        });
 };
 
-exports.service = function (req, res) {
-    var service = lodash.find(services, {_id: parseInt(req.params.id)});
-    return res.render('shop/service', {
-        title: service.name,
-        service: service
-    })
+exports.service = function (req, res, next) {
+    models.service.findOne({_id: req.params.id})
+        .populate('staffs')
+        .exec(function (err, service) {
+            if (err)return next(err);
+
+            return res.render('shop/service', {
+                title: service.name,
+                service: service
+            })
+        })
 };
 
-exports.order = function (req, res) {
-    var service = lodash.find(services, {_id: parseInt(req.params.id)});
-    return res.render('shop/order', {
-        title: '提交订单',
-        service: service
-    });
+exports.order = function (req, res, next) {
+    models.service.findOne({_id: req.params.id})
+        .populate('staffs')
+        .exec(function (err, service) {
+            if (err)return next(err);
+
+            return res.render('shop/order', {
+                title: '提交订单',
+                service: service
+            });
+        })
 };
 
 exports.order_post = function (req, res) {
     // TODO: add handling logic
-    var order_id = 100;
-    return res.redirect('/shop/pay/') + order_id;
+    return res.redirect('shop/pay');
 };
 
-exports.pay = function (req, res) {
+exports.order_success = function (req, res) {
     return res.render('shop/pay', {
         title: '支付订单'
     })
+};
+
+exports.pay = function (req, res) {
 };
 
 exports._shop = shop;

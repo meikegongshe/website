@@ -1,5 +1,5 @@
 exports.init = function () {
-    var confirm_btn = $('[data-type="order_confirm"]');
+    var confirm_btn = $('[data-type="order-confirm"]');
     if(confirm_btn) {
         confirm_btn.click(function () {
             // TODO: should submit form

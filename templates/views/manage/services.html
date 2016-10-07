@@ -1,0 +1,46 @@
+{% extends '../../layouts/manage.html' %}
+
+{% block manage_content %}
+
+<div class="aui-content">
+    <ul class="aui-list aui-media-list">
+        <li class="aui-list-header">
+            项目列表
+        </li>
+        {% if shop.services.length > 0 %}
+        {% for service in shop.services %}
+        <li class="aui-list-item aui-list-item-middle">
+            <div class="aui-media-list-item-inner">
+                <div class="aui-list-item-media" style="width: 3rem;">
+                    <img src="{{ service.icon }}" class="aui-img-round aui-list-img-sm">
+                </div>
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    <div class="aui-list-item-text">
+                        <div class="aui-list-item-title aui-font-size-14">{{ service.name }}</div>
+                    </div>
+                    <div class="aui-list-item-text">
+                        ￥ {{ service.price }}
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+        {% else %}
+        <li class="aui-list-item aui-list-item-middle">
+            <div class="aui-media-list-item-inner">
+                <div class="aui-list-item-text">
+                    暂时还没有服务项目
+                </div>
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+
+<footer class="aui-bar aui-bar-tab" id="footer">
+    <a class="aui-bar-tab-item aui-active" data-type="service-create" data-id="{{ shop._id.toString() }}" tapmode>
+        添 加
+    </a>
+</footer>
+
+{% endblock %}

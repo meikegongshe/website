@@ -2,41 +2,58 @@
 
 {% block manage_content %}
 
-<ul class="aui-list aui-list-in">
-    <li class="aui-list-header">商铺管理</li>
-    <li class="aui-list-item" onclick="location.href='/manage/shop'">
-        <div class="aui-list-item-label-icon">
-            <i class="aui-iconfont aui-icon-cert"></i>
-        </div>
-        <div class="aui-list-item-inner">
-            <div class="aui-list-item-title">基本信息</div>
-            <div class="aui-list-item-right">
-                <i class="aui-iconfont aui-icon-right"></i>
+<li class="aui-content">
+    <ul class="aui-list aui-list-in">
+        {% if shops && shops.length > 0 %}
+        {% for shop in shops %}
+        <li class="aui-list-header">{{ shop.name }}</li>
+        <li class="aui-list-item" data-type="shop-info" data-id="{{ shop._id.toString() }}">
+            <div class="aui-list-item-label-icon">
+                <i class="aui-iconfont aui-icon-cert"></i>
             </div>
-        </div>
-    </li>
-    <li class="aui-list-item">
-        <div class="aui-list-item-label-icon">
-            <i class="aui-iconfont aui-icon-my"></i>
-        </div>
-        <div class="aui-list-item-inner">
-            <div class="aui-list-item-title">人员管理</div>
-            <div class="aui-list-item-right">
-                <i class="aui-iconfont aui-icon-right"></i>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <div class="aui-list-item-title">基本信息</div>
             </div>
-        </div>
-    </li>
-    <li class="aui-list-item">
-        <div class="aui-list-item-label-icon">
-            <i class="aui-iconfont aui-icon-cart"></i>
-        </div>
-        <div class="aui-list-item-inner">
-            <div class="aui-list-item-title">商品管理</div>
-            <div class="aui-list-item-right">
-                <i class="aui-iconfont aui-icon-right"></i>
+        </li>
+        <li class="aui-list-item" data-type="shop-staff" data-id="{{ shop._id.toString() }}">
+            <div class="aui-list-item-label-icon">
+                <i class="aui-iconfont aui-icon-my"></i>
             </div>
-        </div>
-    </li>
-</ul>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <div class="aui-list-item-title">人员管理</div>
+                <div class="aui-list-item-right">
+                    <div class="aui-badge" style="position:relative;top:0; left:0">{{ shop.staffs.length }}</div>
+                </div>
+            </div>
+        </li>
+        <li class="aui-list-item" data-type="shop-service" data-id="{{ shop._id.toString() }}">
+            <div class="aui-list-item-label-icon">
+                <i class="aui-iconfont aui-icon-cart"></i>
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <div class="aui-list-item-title">商品管理</div>
+                <div class="aui-list-item-right">
+                    <div class="aui-badge" style="position:relative;top:0; left:0">{{ shop.services.length }}</div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+        {% else %}
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                暂时没有店铺信息
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+    </div>
 
-{% endblock %}
+    <footer class="aui-bar aui-bar-tab">
+        <div class="aui-bar-tab-item aui-active" data-type="shop-create" tapmode>
+            <i class="aui-iconfont aui-icon-home"></i>
+
+            <div class="aui-bar-tab-label">添加店铺</div>
+        </div>
+    </footer>
+
+    {% endblock %}

@@ -22,3 +22,11 @@ schema.pre('save', function (next) {
 });
 
 mongoose.model('shop', schema);
+
+schema = new mongoose.Schema({
+    account: {type: mongoose.Schema.Types.ObjectId, ref: 'account'},
+    shop: {type: mongoose.Schema.Types.ObjectId, ref: 'shop'},
+    role: {type: String}
+});
+
+mongoose.model('shopManager', schema);

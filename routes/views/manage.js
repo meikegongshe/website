@@ -1,21 +1,194 @@
-exports = module.exports = function (req, res) {
-    switch (req.path) {
-        case '/shop':
-            return req.method === 'POST' ? postShopInfo(req.body) : getShopInfo();
+var models = require('../../models');
 
-        default :
-            return res.render('manage/index', {
-                title: '美客公社后台管理'
-            });
-    }
+exports = module.exports = function (req, res, next) {
+    // TODO: add user check
+    models.shop.find({}, function (err, shops) {
+        if (err) return next(err);
 
-    function getShopInfo() {
-        return res.render('manage/shop', {
-            title: '店铺基本信息'
+        return res.render('manage/index', {
+            title: '美客公社后台管理',
+            shops: shops
+        });
+    })
+};
+
+exports.shop = function (req, res, next) {
+    if (req.params.id) {
+        models.shop.findOne({_id: req.params.id}, function (err, shop) {
+            if (err) return next(err);
+
+            return res.render('manage/shop', {
+                title: shop.name,
+                shop: shop
+            })
+        })
+    } else {
+        res.render('manage/shop', {
+            title: '新建商铺'
         })
     }
+};
 
-    function postShopInfo(data) {
+exports.shop_create = function (req, res, next) {
+    logger.debug(req.body);
 
+    // TODO: add verification
+    var shop = {
+        name: req.body.name,
+        phone: req.body.phone,
+        address: req.body.address,
+        location_x: parseFloat(req.body.location_x),
+        location_y: parseFloat(req.body.location_y)
+    };
+    images = [req.body.image1, req.body.image2, req.body.image3, req.body.image4, req.body.image5];
+    lodash.remove(images, function (item) {
+        return !item;
+    });
+    shop.images = images;
+
+    models.shop.create(shop, function (err) {
+        if (err) return next(err);
+
+        return res.redirect('/manage');
+    })
+};
+
+exports.shop_update = function (req, res) {
+
+};
+
+exports.shop_delete = function (req, res) {
+
+};
+
+exports.staffs = function (req, res, next) {
+    if (req.params.id) {
+        models.shop.findOne({_id: req.params.id})
+            .populate('staffs')
+            .exec(function (err, shop) {
+                if (err) return next(err);
+
+                return res.render('manage/staffs', {
+                    title: shop.name,
+                    shop: shop
+                })
+            })
+    } else {
+        return res.redirect('/manage');
     }
+};
+
+exports.staff = function (req, res, next) {
+    if (req.params.tid) {
+        models.staff.findOne({_id: req.params.tid}, function (err, staff) {
+            if (err) return next(err);
+
+            return res.render('manage/staff', {
+                title: staff.name,
+                staff: staff
+            })
+        })
+    } else {
+        res.render('manage/staff', {
+            title: '新建员工'
+        })
+    }
+};
+
+exports.staff_create = function (req, res, next) {
+    logger.debug(req.body);
+
+    // TODO: add verification
+    var staff = {
+        name: req.body.name,
+        title: req.body.title,
+        portrait: req.body.portrait
+    };
+    models.staff.create(staff, function (err, result) {
+        if (err) return next(err);
+
+        logger.debug(result.toObject());
+        models.shop.findOneAndUpdate({_id: req.params.id}, {$addToSet: {staffs: result}}, function (err) {
+            if (err) return next(err);
+
+            return res.redirect('/manage/shop/' + req.params.id + '/staffs');
+        })
+    })
+};
+
+exports.staff_update = function (req, res, next) {
+
+};
+
+exports.services = function (req, res, next) {
+    if (req.params.id) {
+        models.shop.findOne({_id: req.params.id})
+            .populate('services')
+            .exec(function (err, shop) {
+                if (err) return next(err);
+
+                return res.render('manage/services', {
+                    title: shop.name,
+                    shop: shop
+                })
+            })
+    } else {
+        return res.redirect('/manage');
+    }
+};
+
+exports.service = function (req, res, next) {
+    if (req.params.eid) {
+        // TODO: find the shop and get all staffs
+        // BUG: how to get the shop id?
+        models.service.findOne({_id: req.params.eid})
+            .populate('staffs')
+            .exec(function (err, service) {
+                if (err) return next(err);
+
+                return res.render('manage/service', {
+                    title: service.name,
+                    service: service
+                })
+            })
+    } else {
+        // get staff list in the shop
+        models.shop.findOne({_id: req.params.id})
+            .populate('staffs')
+            .exec(function (err, shop) {
+                res.render('manage/service', {
+                    title: '新建服务项目',
+                    staffs: shop.staffs
+                })
+            });
+    }
+};
+
+exports.service_create = function (req, res, next) {
+    logger.debug(req.body);
+
+    var service = {
+        name: req.body.name,
+        enabled: req.body.enabled == 'on',
+        icon: req.body.icon,
+        duration: parseInt(req.body.duration),
+        price: parseInt(req.body.price),
+        original: parseInt(req.body.original),
+        intro: req.body.intro,
+        staffs: req.body.staffs
+    };
+    models.service.create(service, function (err, result) {
+        if(err) return next(err);
+
+        logger.debug(result.toObject());
+        models.shop.findOneAndUpdate({_id: req.params.id}, {$addToSet: {services: result}}, function (err) {
+            if (err) return next(err);
+
+            return res.redirect('/manage/shop/' + req.params.id + '/services');
+        })
+    })
+};
+
+exports.service_update = function (req, res, next) {
+
 };

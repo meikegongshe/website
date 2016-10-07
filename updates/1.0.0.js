@@ -6,6 +6,9 @@ exports = module.exports = function (done) {
         .then(function (result) {
             if (result > 0) return done();
 
+            // TODO: need a new init logic
+            return done();
+
             initStaff()
                 .then(initService)
                 .then(initShop)

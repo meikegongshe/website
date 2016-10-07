@@ -1,0 +1,51 @@
+{% extends '../../layouts/manage.html' %}
+
+{% block manage_content %}
+
+<form data-type="staff-form" method="post" target="_self">
+    <div class="aui-content aui-margin-b-15">
+        <ul class="aui-list aui-form-list">
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        姓名
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="name" type="text" value="{{ staff.name }}" placeholder="员工姓名">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        职位
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="title" type="text" value="{{ staff.title }}" placeholder="职位名称">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        头像
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="portrait" type="text" value="{{ staff.portrait }}" placeholder="头像地址">
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% if staff %}
+    <input name="_id" type="hidden" value="{{ staff._id }}">
+    {% endif %}
+</form>
+
+<footer class="aui-bar aui-bar-tab" id="footer">
+    <a class="aui-bar-tab-item aui-active" data-type="staff-confirm" tapmode>
+        保 存
+    </a>
+</footer>
+
+{% endblock %}

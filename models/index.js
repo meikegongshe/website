@@ -16,7 +16,9 @@ require('./account');
 require('./order');
 
 exports.shop = mongoose.model('shop');
+exports.shopManager = mongoose.model('shopManager');
 exports.service = mongoose.model('service');
 exports.staff = mongoose.model('staff');
 exports.account = mongoose.model('account');
+exports.thirdAccount = mongoose.model('thirdAccount');
 exports.order = mongoose.model('order');
