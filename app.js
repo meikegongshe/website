@@ -8,7 +8,7 @@ var express = require('express'),
     swig = require('swig'),
     log4js = require('log4js'),
     lodash = require('lodash'),
-    author = require('./components/authorization'),
+    author = require('./components/author'),
     server = require('./components/server');
 
 require('dotenv').config();
@@ -78,7 +78,6 @@ app.use(session({
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
-author.initialize(app);
 
 // init data
 app.use(function (req, res, next) {
@@ -90,6 +89,9 @@ app.use(function (req, res, next) {
         next();
     });
 });
+
+// auth
+author(app);
 
 var routes = require('./routes');
 app.use('/', routes);

@@ -1,5 +1,6 @@
 var express = require('express'),
     router = express.Router(),
+    passport = require('passport'),
     manage = require('./views/manage'),
     home = require('./views/home'),
     shop = require('./views/shop'),
@@ -12,6 +13,12 @@ router.use(function (req, res, next) {
 
     next();
 });
+
+router.get('/auth/wechat', passport.authenticate('wechat'));
+router.get('/auth/wechat/callback', passport.authenticate('wechat', {
+    failureRedirect: '/auth/fail',
+    successReturnToOrRedirect: '/'
+}));
 
 router.get('/', home);
 router.get('/shop', home);
@@ -48,5 +55,17 @@ router.get('/manage/shop/:id/service', manage.service);
 router.post('/manage/shop/:id/service', manage.service_create);
 router.get('/manage/service/:eid', manage.service);
 router.post('/manage/service/:eid', manage.service_update);
+
+// wechat verification
+router.get('/wechat/verify', function (req, res, next) {
+    var signature = req.query.signature,
+        timestamp = req.query.timestamp,
+        nonce = req.query.nonce,
+        echostr = req.query.echostr;
+
+    logger.debug('signature:' + signature + ', timestamp:' + timestamp + ', nonce:' + nonce + ', echostr:' + echostr);
+
+    return res.send(echostr);
+});
 
 exports = module.exports = router;
