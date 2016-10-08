@@ -8,7 +8,7 @@
         {{ loop.key }}
     </li>
     {% for item in order %}
-    <li class="aui-list-item">
+    <li class="aui-list-item" data-type="order-{{ item.state }}" data-id="{{ item._id.toString() }}">
         <div class="aui-media-list-item-inner">
             <div class="aui-list-item-media" style="width: 3rem;">
                 <img src="{{ item.service.icon }}" class="aui-img-round aui-list-img-sm">
@@ -16,7 +16,7 @@
             <div class="aui-list-item-inner aui-list-item-arrow">
                 <div class="aui-list-item-text">
                     <div class="aui-list-item-title aui-font-size-14">{{ item.service.name }}</div>
-                    <div class="aui-list-item-right">{{ item.state }}</div>
+                    <div class="aui-list-item-right">{{ item.state|state_str }}</div>
                 </div>
                 <div class="aui-list-item-text" style="color: red">
                     ￥ {{ item.price }}

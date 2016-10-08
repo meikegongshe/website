@@ -7,6 +7,7 @@ var schema = new mongoose.Schema({
     portrait: {type: String},
     type: {type: String},
     intro: {type: String},
+    shop: {type: mongoose.Schema.Types.ObjectId, ref: 'shop'},
     added: {type: Date, default: Date.now}
 });
 

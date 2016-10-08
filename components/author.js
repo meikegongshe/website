@@ -10,24 +10,62 @@ passport.use(new wechatStrategy({
     scope: 'snsapi_userinfo',
     state: 'meike',
     callbackURL: 'http://www.v-wisdom.com/auth/wechat/callback'
-}, function (accessToken, refreshToken, profile, done) {
+}, function (accessToken, refreshToken, profile, expires_in, done) {
+    var models = require('../models');
+
     logger.debug("access token:" + accessToken);
     logger.debug("refresh token:" + refreshToken);
     logger.debug("profile:" + JSON.stringify(profile));
 
-    return done(null, profile);
+    if (!profile || !profile.openid) return done('Auth failed', null);
+
+    // find account
+    models.thirdAccount.findOne({uid: profile.openid})
+        .populate('account')
+        .exec(function (err, thirdAccount) {
+            if (err) return done(err, null);
+
+            if (!thirdAccount) {
+                // create account
+                models.account.create({
+                    name: profile.nickname,
+                    portrait: profile.headimgurl
+                }, function (err, account) {
+                    if (err) return done(err, null);
+
+                    models.thirdAccount.create({
+                        type: 'wechat',
+                        uid: profile.openid,
+                        account: account
+                    }, function (err) {
+                        if (err) return done(err, null);
+
+                        return done(null, account);
+                    })
+                })
+            } else {
+                // update name and portrait
+                thirdAccount.account.name = profile.nickname;
+                thirdAccount.account.portrait = profile.headimgurl;
+                thirdAccount.account.save(function (err, account) {
+                    if (err) return done(err, null);
+
+                    return done(null, account);
+                })
+            }
+        })
 }));
 
-passport.serializeUser(function (user, done) {
-    logger.debug("serialize user:" + JSON.stringify(user));
-
-    done(null, user.openid);
+passport.serializeUser(function (account, done) {
+    done(null, account._id.toString());
 });
 
-passport.deserializeUser(function (user, done) {
-    logger.debug("deserialize user" + JSON.stringify(user));
+passport.deserializeUser(function (id, done) {
+    require('../models').account.findOne({_id: id}, function (err, account) {
+        if (err) return done(err, null);
 
-    done(null, user);
+        done(null, account);
+    })
 });
 
 exports = module.exports = function (app) {

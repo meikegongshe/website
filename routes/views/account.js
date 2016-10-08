@@ -1,3 +1,5 @@
+var models = require('../../models');
+
 var account = {
     name: '我是用户',
     role: 'user',
@@ -60,11 +62,15 @@ var account = {
 
 
 exports = module.exports = exports.index = function (req, res) {
-    return res.render('account/index', {
-        title: '个人信息',
-        account: account,
-        footer_index: 4
-    })
+    if (req.isAuthenticated()) {
+        return res.render('account/index', {
+            title: '个人信息',
+            account: req.user,
+            footer_index: 4
+        })
+    } else {
+        return res.send("Please logon first");
+    }
 };
 
 exports.member = function (req, res) {
@@ -85,32 +91,65 @@ exports.member = function (req, res) {
 };
 
 exports.order = function (req, res) {
-    var id = req.params.id;
-    if (id) {
-        return res.render('account/order', {
-            title: id + ' 订单详情',
-            members: account.orders,
-            footer_index: 4
+    models.order.find({account: req.user._id})
+        .populate({path: 'service', populate: {path: 'shop'}})
+        .exec(function (err, results) {
+            if (err) return next(err);
+
+            // TODO: get shop name
+            logger.debug(results);
+
+            var id = req.params.id;
+            if (id) {
+                return res.render('account/order', {
+                    title: id + ' 订单详情',
+                    members: results,
+                    footer_index: 4
+                })
+            } else {
+                var orders = lodash.groupBy(results, function (order) {
+                    return order.service.shop.name;
+                });
+
+                var unpaid = lodash.groupBy(lodash.filter(results, {state: 'unpaid'}), function (order) {
+                    return order.service.shop.name;
+                });
+
+                var unused = lodash.groupBy(lodash.filter(results, {state: 'unused'}), function (order) {
+                    return order.service.shop.name;
+                });
+
+                return res.render('account/order', {
+                    title: '我的订单',
+                    orders: orders,
+                    unpaid: unpaid,
+                    unused: unused,
+                    footer_index: 4
+                })
+            }
         })
-    } else {
-        var orders = lodash.groupBy(account.orders, function (order) {
-            return order.service.shop.name;
-        });
+};
 
-        var unpaid = lodash.groupBy(lodash.filter(account.orders, {state: '未支付'}), function (order) {
-            return order.service.shop.name;
-        });
+exports.phone = function (req, res) {
+    return res.render('account/phone', {
+        title: '绑定电话号码'
+    })
+};
 
-        var unused = lodash.groupBy(lodash.filter(account.orders, {state: '未消费'}), function (order) {
-            return order.service.shop.name;
-        });
+exports.phone_post = function (req, res, next) {
+    logger.debug(req.body);
 
-        return res.render('account/order', {
-            title: '我的订单',
-            orders: orders,
-            unpaid: unpaid,
-            unused: unused,
-            footer_index: 4
-        })
-    }
-}
+    // TODO: add code verification
+
+    models.account.findByIdAndUpdate(req.user._id, {$set: {phone: req.body.phone}}, function (err) {
+        if (err) return next(err);
+
+        req.user.phone = req.body.phone;
+
+        if (req.query.redirectUrl) {
+            return res.redirect(req.query.redirectUrl);
+        } else {
+            return res.redirect('/account');
+        }
+    });
+};

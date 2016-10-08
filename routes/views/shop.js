@@ -77,9 +77,9 @@ var shop = {
     location_y: 113.935593,
     services: services,
     staffs: staffs
-}
+};
 
-exports = module.exports = exports.index = function (req, res) {
+exports = module.exports = exports.index = function (req, res, next) {
     models.shop.findOne({_id: req.params.id})
         .populate(['staffs', 'services'])
         .exec(function (err, shop) {
@@ -106,6 +106,27 @@ exports.service = function (req, res, next) {
 };
 
 exports.order = function (req, res, next) {
+    if (req.user.phone) {
+        models.service.findOne({_id: req.params.id}, function (err, service) {
+            if (err)return next(err);
+            if (!service) return next('Service is nonexistence');
+
+            // add order
+            models.order.create({
+                account: req.user._id,
+                service: service.id,
+                price: service.price
+            }, function (err, order) {
+                if (err) return next(err);
+
+                return res.redirect('/shop/pay/' + req.params.id);
+            })
+        });
+    } else {
+        return res.redirect('/account/phone?redirectUrl=' + req.originalUrl);
+    }
+
+    /*
     models.service.findOne({_id: req.params.id})
         .populate('staffs')
         .exec(function (err, service) {
@@ -116,6 +137,7 @@ exports.order = function (req, res, next) {
                 service: service
             });
         })
+   */
 };
 
 exports.order_post = function (req, res) {

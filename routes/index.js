@@ -1,6 +1,7 @@
 var express = require('express'),
     router = express.Router(),
     passport = require('passport'),
+    middleware = require('./middleware');
     manage = require('./views/manage'),
     home = require('./views/home'),
     shop = require('./views/shop'),
@@ -24,19 +25,21 @@ router.get('/', home);
 router.get('/shop', home);
 router.get('/shop/:id', shop);
 router.get('/shop/service/:id', shop.service);
-router.get('/shop/order/:id', shop.order);
-router.post('/shop/order/:id', shop.order_post);
-router.get('/shop/pay/:id', shop.order_success);
+router.get('/shop/order/:id', middleware.auth, shop.order);
+router.post('/shop/order/:id', middleware.auth, shop.order_post);
+router.get('/shop/pay/:id', middleware.auth, shop.order_success);
 
 router.get('/commune', commune);
 
 router.get('/mall', mall);
 
-router.get('/account', account);
-router.get('/account/members', account.member);
-router.get('/account/member/:id', account.member);
-router.get('/account/orders', account.order);
-router.get('/account/order/:id', account.order);
+router.get('/account', middleware.auth, account);
+router.get('/account/members', middleware.auth, account.member);
+router.get('/account/member/:id', middleware.auth, account.member);
+router.get('/account/orders', middleware.auth, account.order);
+router.get('/account/order/:id', middleware.auth, account.order);
+router.get('/account/phone', middleware.auth, account.phone);
+router.post('/account/phone', middleware.auth, account.phone_post);
 
 //router.use('/manage', manage);
 

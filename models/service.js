@@ -10,6 +10,7 @@ var schema = new mongoose.Schema({
     price: {type: Number},
     original: {type: Number},
     intro: {type: String},
+    shop: {type: mongoose.Schema.Types.ObjectId, ref: 'shop'},
     staffs: [{type: mongoose.Schema.Types.ObjectId, ref: 'staff'}],
     enabled: {type: Boolean, default: true},
     added: {type: Date, default: Date.now}

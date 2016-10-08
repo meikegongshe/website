@@ -3,7 +3,8 @@ var express = require('express'),
     path = require('path'),
     favicon = require('serve-favicon'),
     cookieParser = require('cookie-parser'),
-    RedisStore = require('connect-redis')(session),
+    //RedisStore = require('connect-redis')(session),
+    MongoStore = require('connect-mongo')(session);
     bodyParser = require('body-parser'),
     swig = require('swig'),
     log4js = require('log4js'),
@@ -46,6 +47,9 @@ app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views', './templates/views');
 
+// custom filters
+swig.setFilter('state_str', require('./components/filter').state_str);
+
 app.use(favicon(__dirname + '/public/favicon.ico'));
 
 // The body-parser does not think the utf8 is a valid encoding...
@@ -67,7 +71,7 @@ var sessionSecret = 'E8FE115F3FE05D54331B2A9EC5B3EB79';
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser(sessionSecret));
-app.use(session({
+/*app.use(session({
     secret: sessionSecret,
     store: new RedisStore({
         port: process.env.REDIS_PORT,
@@ -75,7 +79,17 @@ app.use(session({
     }),
     resave: true,
     saveUninitialized: true
-}));
+}));*/
+
+app.use(session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    store: new MongoStore({
+        url: process.env.MONGO_URI,
+        db: 'maker'
+    })
+}))
 
 app.use(express.static(path.join(__dirname, 'public')));
 

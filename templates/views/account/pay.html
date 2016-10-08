@@ -1,0 +1,22 @@
+{% extends '../../layouts/page.html' %}
+
+{% block page_content %}
+
+
+
+{% endblock %}
+
+{% block page_footer %}
+
+<script type="text/javascript">
+    WeixinJSBridge.invoke("getBrandWCPayRequest", {% JSON.stringify(payArgs) %}, function(res){
+        if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+            // success
+            location.href = '/account';
+        } else {
+            alert('支付失败');
+        }
+    });
+</script>
+
+{% endblock %}

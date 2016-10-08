@@ -102,7 +102,8 @@ exports.staff_create = function (req, res, next) {
     var staff = {
         name: req.body.name,
         title: req.body.title,
-        portrait: req.body.portrait
+        portrait: req.body.portrait,
+        shop: req.params.id
     };
     models.staff.create(staff, function (err, result) {
         if (err) return next(err);
@@ -175,10 +176,11 @@ exports.service_create = function (req, res, next) {
         price: parseInt(req.body.price),
         original: parseInt(req.body.original),
         intro: req.body.intro,
+        shop: req.params.id,
         staffs: req.body.staffs
     };
     models.service.create(service, function (err, result) {
-        if(err) return next(err);
+        if (err) return next(err);
 
         logger.debug(result.toObject());
         models.shop.findOneAndUpdate({_id: req.params.id}, {$addToSet: {services: result}}, function (err) {

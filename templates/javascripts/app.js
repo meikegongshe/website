@@ -2,7 +2,9 @@ var asset = require('./asset'),
     home = require('./views/home'),
     shop = require('./views/shop/shop'),
     service = require('./views/shop/service'),
-    order = require('./views/shop/order');
+    order = require('./views/shop/order'),
+    phone = require('./views/account/phone'),
+    user_order = require('./views/account/order');
 
 $('document').ready(function () {
     console.log('page is ready');
@@ -40,4 +42,6 @@ $('document').ready(function () {
     shop.init();
     service.init();
     order.init();
+    phone.init();
+    user_order.init();
 });
