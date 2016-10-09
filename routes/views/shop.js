@@ -119,7 +119,7 @@ exports.order = function (req, res, next) {
             }, function (err, order) {
                 if (err) return next(err);
 
-                return res.redirect('/shop/pay/' + req.params.id);
+                return res.redirect('/shop/pay/' + order._id.toString());
             })
         });
     } else {

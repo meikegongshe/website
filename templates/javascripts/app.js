@@ -5,7 +5,8 @@ var asset = require('./asset'),
     order = require('./views/shop/order'),
     phone = require('./views/account/phone'),
     user_order = require('./views/account/order'),
-    pay = require('./views/shop/pay');
+    pay = require('./views/shop/pay'),
+    user_pay = require('./views/account/pay');
 
 $('document').ready(function () {
     console.log('page is ready');
@@ -46,4 +47,5 @@ $('document').ready(function () {
     phone.init();
     user_order.init();
     pay.init();
+    user_pay.init();
 });

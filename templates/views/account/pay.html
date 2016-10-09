@@ -8,20 +8,10 @@
 
 {% block page_footer %}
 
-<div>{{ JSON.stringify(payArgs) }}</div>
+<p id="debug-log">{{ JSON.stringify(payArgs) }}</p>
 
 <script type="text/javascript">
-    $('document').ready(function () {
-        WeixinJSBridge.invoke("getBrandWCPayRequest", '{{ JSON.stringify(payArgs) }}', function (res) {
-            if (res.err_msg == "get_brand_wcpay_request:ok") {
-                // success
-                location.href = '/account';
-            } else {
-                alert('支付失败');
-            }
-        });
-        alert('ok');
-    });
+    var payArgs = {{ JSON.stringify(payArgs) }};
 </script>
 
 {% endblock %}

@@ -18,8 +18,11 @@
                     <div class="aui-list-item-title aui-font-size-14">{{ item.service.name }}</div>
                     <div class="aui-list-item-right">{{ item.state|state_str }}</div>
                 </div>
-                <div class="aui-list-item-text" style="color: red">
-                    ￥ {{ item.price }}
+                <div class="aui-info aui-margin-t-5" style="padding:0">
+                    <div class="aui-info-item" style="color: red">
+                        ￥ {{ item.price }}
+                    </div>
+                    <div class="aui-info-item">{{ item.added|date('Y-m-d') }}</div>
                 </div>
             </div>
         </div>
