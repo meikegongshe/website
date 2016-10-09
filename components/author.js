@@ -40,6 +40,7 @@ passport.use(new wechatStrategy({
                     }, function (err) {
                         if (err) return done(err, null);
 
+                        account.openid = profile.openid;
                         return done(null, account);
                     })
                 })
@@ -50,20 +51,23 @@ passport.use(new wechatStrategy({
                 thirdAccount.account.save(function (err, account) {
                     if (err) return done(err, null);
 
+                    account.openid = profile.openid;
                     return done(null, account);
                 })
             }
         })
 }));
 
-passport.serializeUser(function (account, done) {
-    done(null, account._id.toString());
+passport.serializeUser(function (user, done) {
+    done(null, [user._id.toString(), user.openid].join(','));
 });
 
 passport.deserializeUser(function (id, done) {
-    require('../models').account.findOne({_id: id}, function (err, account) {
+    var ids = id.split(',');
+    require('../models').account.findOne({_id: ids[0]}, function (err, account) {
         if (err) return done(err, null);
 
+        account.openid = ids[1];
         done(null, account);
     })
 });

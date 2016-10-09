@@ -42,3 +42,4 @@ jspm_packages
 #glup generated files
 public/javascripts/
 public/styles/
+asset/

@@ -153,3 +153,19 @@ exports.phone_post = function (req, res, next) {
         }
     });
 };
+
+exports.pay = function (req, res, next) {
+    models.order.findOne({_id: req.params.id})
+        .populate('service')
+        .exec(function (err, order) {
+            if (err) return next(err);
+
+            require('../../components/pay').createOrder(req, order, function (err, data) {
+                return res.render('account/pay', {
+                    title: '支付订单',
+                    order: order,
+                    payArgs: data
+                })
+            })
+        })
+}

@@ -146,12 +146,20 @@ exports.order_post = function (req, res) {
 };
 
 exports.order_success = function (req, res) {
-    return res.render('shop/pay', {
-        title: '支付订单'
-    })
+    models.order.findOne({_id: req.params.id})
+        .populate('service')
+        .exec(function (err, order) {
+            if (err) return next(err);
+            
+            return res.render('shop/pay', {
+                title: '支付订单',
+                order: order
+            })
+        })
 };
 
 exports.pay = function (req, res) {
+
 };
 
 exports._shop = shop;

@@ -40,6 +40,7 @@ router.get('/account/orders', middleware.auth, account.order);
 router.get('/account/order/:id', middleware.auth, account.order);
 router.get('/account/phone', middleware.auth, account.phone);
 router.post('/account/phone', middleware.auth, account.phone_post);
+router.get('/account/pay/:id', middleware.auth, account.pay);
 
 //router.use('/manage', manage);
 
