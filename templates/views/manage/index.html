@@ -37,6 +37,22 @@
                 </div>
             </div>
         </li>
+        <li class="aui-list-item" data-type="user-consume" data-id="{{ shop._id.toString() }}">
+            <div class="aui-list-item-label-icon">
+                <i class="aui-iconfont aui-icon-pencil"></i>
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <div class="aui-list-item-title">用户消费</div>
+            </div>
+        </li>
+        <li class="aui-list-item" data-type="consume-list" data-id="{{ shop._id.toString() }}">
+            <div class="aui-list-item-label-icon">
+                <i class="aui-iconfont aui-icon-edit"></i>
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                <div class="aui-list-item-title">消费记录</div>
+            </div>
+        </li>
         {% endfor %}
         {% else %}
         <li class="aui-list-item">

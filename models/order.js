@@ -8,7 +8,9 @@ var schema = new mongoose.Schema({
     price: {type: String},
     state: {type: String, default: 'unpaid'},
     paid: {type: Date},
+    used: {type: Date},
     schedule: {type: Date},
+    code: {type: String},
     added: {type: Date, default: Date.now}
 });
 

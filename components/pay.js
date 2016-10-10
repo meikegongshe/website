@@ -20,7 +20,7 @@ exports.createOrder = function (req, order, callback) {
         body: order.service.name,
         detail: order.service.name,
         out_trade_no: '20161010' + Math.random().toString().substr(2, 10),
-        total_fee: order.price,
+        total_fee: order.price * 100,
         spbill_create_ip: getClientIp(req),
         notify_url: 'http://www.v-wisdom.com'
     }, callback);

@@ -1,7 +1,7 @@
 {% extends '../../layouts/page.html' %}
 {% macro order_list(values) %}
 
-{% if values %}
+{% if values && Object.keys(values).length > 0 %}
 {% for order in values %}
 <ul class="aui-list aui-media-list aui-hide">
     <li class="aui-list-header">
@@ -22,7 +22,7 @@
                     <div class="aui-info-item" style="color: red">
                         ￥ {{ item.price }}
                     </div>
-                    <div class="aui-info-item">{{ item.added|date('Y-m-d') }}</div>
+                    <div class="aui-info-item">{{ item.added|date('Y-m-d H:i:s', -480, 'CCT') }}</div>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
         {{ order_list(orders) }}
         {{ order_list(unpaid) }}
         {{ order_list(unused) }}
-        {{ order_list(refund) }}
+        {{ order_list(used) }}
     </div>
 </div>
 

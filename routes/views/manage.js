@@ -194,3 +194,41 @@ exports.service_create = function (req, res, next) {
 exports.service_update = function (req, res, next) {
 
 };
+
+exports.consumes = function (req, res, next) {
+    models.order.find({'state': 'used'})
+        .populate('service')
+        .exec(function (err, orders) {
+            if (err) return next(err);
+
+            return res.render('manage/consumes', {
+                orders: lodash.filter(orders, function (item) {
+                    return item.service.shop.toString() == req.params.id;
+                })
+            });
+        })
+};
+
+exports.consume = function (req, res) {
+    return res.render('manage/consume');
+};
+
+exports.consume_post = function (req, res, next) {
+    logger.debug(req.body);
+
+    models.order.findOne({code: req.body.code, state: 'unused'}, function (err, order) {
+        if (err) return next(err);
+
+        if (!order) {
+            return res.render('manage/consume_fail');
+        }
+
+        order.state = 'used';
+        order.used = Date.now();
+        order.save(function (err) {
+            if (err) return next(err);
+
+            return res.render('manage/consume_success');
+        })
+    });
+};

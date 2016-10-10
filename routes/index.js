@@ -2,7 +2,7 @@ var express = require('express'),
     router = express.Router(),
     passport = require('passport'),
     middleware = require('./middleware');
-    manage = require('./views/manage'),
+manage = require('./views/manage'),
     home = require('./views/home'),
     shop = require('./views/shop'),
     commune = require('./views/commune'),
@@ -40,7 +40,10 @@ router.get('/account/orders', middleware.auth, account.order);
 router.get('/account/order/:id', middleware.auth, account.order);
 router.get('/account/phone', middleware.auth, account.phone);
 router.post('/account/phone', middleware.auth, account.phone_post);
+router.get('/account/pay/success/:id', middleware.auth, account.pay_success);
+router.get('/account/pay/fail/:id', middleware.auth, account.pay_fail);
 router.get('/account/pay/:id', middleware.auth, account.pay);
+router.get('/account/consume/:id', middleware.auth, account.consume);
 
 //router.use('/manage', manage);
 
@@ -59,6 +62,9 @@ router.get('/manage/shop/:id/service', manage.service);
 router.post('/manage/shop/:id/service', manage.service_create);
 router.get('/manage/service/:eid', manage.service);
 router.post('/manage/service/:eid', manage.service_update);
+router.get('/manage/consume', manage.consume);
+router.post('/manage/consume', manage.consume_post);
+router.get('/manage/consumes/:id', manage.consumes);
 
 // wechat verification
 router.get('/wechat/verify', function (req, res, next) {

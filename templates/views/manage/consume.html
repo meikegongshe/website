@@ -1,0 +1,28 @@
+{% extends '../../layouts/manage.html' %}
+
+{% block manage_content %}
+
+<div class="aui-content-padded">
+    <form method="post" data-type="consume-form" target="_self">
+        <ul class="aui-list aui-form-list">
+            <li class="aui-list-header">录入消费码进行核销</li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        消费码
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="text" name="code" placeholder="12位消费码">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <input type="submit" class="aui-btn aui-btn-primary" value="提 交">
+                </div>
+            </li>
+        </ul>
+    </form>
+</div>
+
+{% endblock %}

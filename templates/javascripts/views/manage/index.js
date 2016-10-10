@@ -38,4 +38,18 @@ exports.init = function () {
             })
         });
     }
+
+    var user_consume = $('[data-type="user-consume"]');
+    if (user_consume) {
+        user_consume.click(function () {
+            location.href = '/manage/consume';
+        })
+    }
+
+    var consume_list = $('[data-type="consume-list"]');
+    if (consume_list) {
+        consume_list.click(function () {
+            location.href = '/manage/consumes/' + $(this).attr('data-id');
+        })
+    }
 }

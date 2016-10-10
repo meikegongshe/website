@@ -96,9 +96,6 @@ exports.order = function (req, res) {
         .exec(function (err, results) {
             if (err) return next(err);
 
-            // TODO: get shop name
-            logger.debug(results);
-
             var id = req.params.id;
             if (id) {
                 return res.render('account/order', {
@@ -119,11 +116,19 @@ exports.order = function (req, res) {
                     return order.service.shop.name;
                 });
 
+                var used = lodash.groupBy(lodash.filter(results, {state: 'used'}), function (order) {
+                    return order.service.shop.name;
+                });
+
+                logger.debug('unused:' + JSON.stringify(unused));
+                logger.debug('used:' + JSON.stringify(used));
+
                 return res.render('account/order', {
                     title: '我的订单',
                     orders: orders,
                     unpaid: unpaid,
                     unused: unused,
+                    used: used,
                     footer_index: 4
                 })
             }
@@ -168,4 +173,59 @@ exports.pay = function (req, res, next) {
                 })
             })
         })
+};
+
+exports.pay_success = function (req, res, next) {
+    // generate consumer code
+    generateCode(function (err, code) {
+        if (err) return next(err);
+
+        models.order.update({_id: req.params.id}, {
+            $set: {
+                code: code,
+                paid: Date.now(),
+                state: 'unused'
+            }
+        }, function (err) {
+            if (err) return next(err);
+
+            return res.render('account/pay_success', {
+                title: '支付成功',
+                code: code
+            })
+        })
+    })
+};
+
+exports.pay_fail = function (req, res) {
+    return res.render('account/pay_fail', {
+        title: '支付失败'
+    })
+};
+
+exports.consume = function (req, res, next) {
+    models.order.findOne({_id: req.params.id}, function (err, order) {
+        if (err) return next(err);
+
+        return res.render('account/consume', {
+            title: '消费代码',
+            order: order
+        })
+    })
+};
+
+function generateCode(callback) {
+    var code = '';
+
+    for (var i = 0; i < 12; ++i) {
+        code += Math.floor(Math.random() * 10).toString();
+    }
+
+    models.order.count({code: code}, function (err, count) {
+        if (err) return callback(err);
+
+        if (count > 0) return generateCode(callback);
+
+        return callback(null, code);
+    })
 }

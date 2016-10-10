@@ -1,0 +1,20 @@
+{% extends '../../layouts/page.html' %}
+
+{% block page_content %}
+
+<div class="aui-content-padded">
+    <ul class="aui-list">
+        {% for order in orders %}
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-title">{{ order.code }}</div>
+                <div class="aui-list-item-right">{{ order.used|date('Y-m-d H:i:s', -480, 'CCT') }}</div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block page_footer %}{% endblock %}

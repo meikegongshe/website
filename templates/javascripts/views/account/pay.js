@@ -1,12 +1,14 @@
 exports.init = function () {
     function onBridgeReady() {
+        var order_id = $('#order-id').attr('data-id');
+
         if (payArgs) {
             WeixinJSBridge.invoke("getBrandWCPayRequest", payArgs, function (res) {
                 if (res.err_msg == "get_brand_wcpay_request:ok") {
                     // success
-                    location.href = '/account';
+                    location.href = '/account/pay/success/' + order_id;
                 } else {
-                    document.getElementById('debug-log').innerText += res.err_msg;
+                    location.href = '/account/pay/fail/' + order_id;
                 }
             });
         }
