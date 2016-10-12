@@ -2,7 +2,7 @@ var express = require('express'),
     router = express.Router(),
     passport = require('passport'),
     middleware = require('./middleware');
-manage = require('./views/manage'),
+    manage = require('./views/manage'),
     home = require('./views/home'),
     shop = require('./views/shop'),
     commune = require('./views/commune'),
@@ -39,7 +39,9 @@ router.get('/account/member/:id', middleware.auth, account.member);
 router.get('/account/orders', middleware.auth, account.order);
 router.get('/account/order/:id', middleware.auth, account.order);
 router.get('/account/phone', middleware.auth, account.phone);
+router.get('/account/phone_vcode/:phone', middleware.auth, account.phone_vcode);
 router.post('/account/phone', middleware.auth, account.phone_post);
+router.get('/account/phone_fail', middleware.auth, account.phone_fail);
 router.get('/account/pay/success/:id', middleware.auth, account.pay_success);
 router.get('/account/pay/fail/:id', middleware.auth, account.pay_fail);
 router.get('/account/pay/:id', middleware.auth, account.pay);
@@ -47,24 +49,24 @@ router.get('/account/consume/:id', middleware.auth, account.consume);
 
 //router.use('/manage', manage);
 
-router.get('/manage', manage);
-router.get('/manage/shop', manage.shop);
-router.post('/manage/shop', manage.shop_create);
-router.get('/manage/shop/:id', manage.shop);
-router.post('/manage/shop/:id', manage.shop_update);
-router.get('/manage/shop/:id/staffs', manage.staffs);
-router.get('/manage/shop/:id/staff', manage.staff);
-router.post('/manage/shop/:id/staff', manage.staff_create);
-router.get('/manage/staff/:tid', manage.staff);
-router.post('/manage/staff/:tid', manage.staff_update);
-router.get('/manage/shop/:id/services', manage.services);
-router.get('/manage/shop/:id/service', manage.service);
-router.post('/manage/shop/:id/service', manage.service_create);
-router.get('/manage/service/:eid', manage.service);
-router.post('/manage/service/:eid', manage.service_update);
-router.get('/manage/consume', manage.consume);
-router.post('/manage/consume', manage.consume_post);
-router.get('/manage/consumes/:id', manage.consumes);
+router.get('/manage', middleware.auth_manager, manage);
+router.get('/manage/shop', middleware.auth_manager, manage.shop);
+router.post('/manage/shop', middleware.auth_manager, manage.shop_create);
+router.get('/manage/shop/:id', middleware.auth_manager, manage.shop);
+router.post('/manage/shop/:id', middleware.auth_manager, manage.shop_update);
+router.get('/manage/shop/:id/staffs', middleware.auth_manager, manage.staffs);
+router.get('/manage/shop/:id/staff', middleware.auth_manager, manage.staff);
+router.post('/manage/shop/:id/staff', middleware.auth_manager, manage.staff_create);
+router.get('/manage/staff/:tid', middleware.auth_manager, manage.staff);
+router.post('/manage/staff/:tid', middleware.auth_manager, manage.staff_update);
+router.get('/manage/shop/:id/services', middleware.auth_manager, manage.services);
+router.get('/manage/shop/:id/service', middleware.auth_manager, manage.service);
+router.post('/manage/shop/:id/service', middleware.auth_manager, manage.service_create);
+router.get('/manage/service/:eid', middleware.auth_manager, manage.service);
+router.post('/manage/service/:eid', middleware.auth_manager, manage.service_update);
+router.get('/manage/consume', middleware.auth_manager, manage.consume);
+router.post('/manage/consume', middleware.auth_manager, manage.consume_post);
+router.get('/manage/consumes/:id', middleware.auth_manager, manage.consumes);
 
 // wechat verification
 router.get('/wechat/verify', function (req, res, next) {

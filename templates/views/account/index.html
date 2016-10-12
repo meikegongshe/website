@@ -59,6 +59,15 @@
                 <div class="aui-grid-label">退款/售后</div>
             </div>
         </div>
+        {% if account.role.indexOf('manager') >= 0 %}
+        <div class="aui-row">
+            <div class="aui-col-xs-4" id="manage-btn">
+                <i class="aui-iconfont aui-icon-home"></i>
+
+                <div class="aui-grid-label">商铺管理</div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 
 </section>

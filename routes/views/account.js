@@ -1,4 +1,5 @@
-var models = require('../../models');
+var models = require('../../models'),
+    http = require('http');
 
 var account = {
     name: '我是用户',
@@ -144,7 +145,15 @@ exports.phone = function (req, res) {
 exports.phone_post = function (req, res, next) {
     logger.debug(req.body);
 
-    // TODO: add code verification
+    // code verification
+    var vstr = req.body.phone + req.body.code;
+    if(!req.session.vcode || req.session.vcode != vstr) {
+        logger.debug('binding phone failed: ' + vstr + ' [expected] ' + req.session.vcode);
+
+        return res.redirect('/account/phone_fail');
+    }
+
+    delete  req.session.vcode;
 
     models.account.findByIdAndUpdate(req.user._id, {$set: {phone: req.body.phone}}, function (err) {
         if (err) return next(err);
@@ -157,6 +166,12 @@ exports.phone_post = function (req, res, next) {
             return res.redirect('/account');
         }
     });
+};
+
+exports.phone_fail = function (req, res) {
+    return res.render('account/phone_fail', {
+        title: '绑定电话号码失败'
+    })
 };
 
 exports.pay = function (req, res, next) {
@@ -214,12 +229,47 @@ exports.consume = function (req, res, next) {
     })
 };
 
-function generateCode(callback) {
+exports.phone_vcode = function (req, res, next) {
+    var phone = req.params.phone,
+        code = generateCode(6);
+    req.session.vcode = phone + generateCode(6);
+    var content = '美客公社验证码：' + code + '，过期无效';
+
+    logger.debug('binding phone: ' + phone + ' code: ' + code);
+
+    var options = {
+        hostname: 'sz.ipyy.com',
+        port: 80,
+        path: '/sms.aspx?action=send&userid=&account=szzd0076&password=szzd0076&mobile=' + phone + '&content=' + content + '&sendTime=&extno=',
+        method: 'GET'
+    };
+
+    logger.debug(options);
+
+    http.request(options, function(result){
+        logger.debug('STATUS: ' + result.statusCode);
+        logger.debug('HEADERS: ' + JSON.stringify(result.headers));
+        result.setEncoding('utf8');
+        result.on('data', function (chunk) {
+            logger.debug('BODY: ' + chunk);
+        });
+    }).end();
+
+    return res.json();
+};
+
+function generateCode(count) {
     var code = '';
 
-    for (var i = 0; i < 12; ++i) {
+    for (var i = 0; i < count; ++i) {
         code += Math.floor(Math.random() * 10).toString();
     }
+
+    return code;
+}
+
+function generateConsumeCode(callback) {
+    var code = generateCode(12);
 
     models.order.count({code: code}, function (err, count) {
         if (err) return callback(err);
