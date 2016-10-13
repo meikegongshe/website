@@ -2,12 +2,19 @@ var models = require('../models'),
     q = require('q');
 
 exports = module.exports = function (done) {
-    models.shop.where({}).count()
+    models.account.where({}).count()
         .then(function (result) {
             if (result > 0) return done();
 
             // TODO: need a new init logic
-            return done();
+            models.account.create({
+                name: '管理员',
+                role: 'user,manager,admin',
+                portrait: 'http://img.hb.aicdn.com/a76d0ce8308e4a2ed83ef6edd73bcefa2f0d729611385-jWDAVf_fw658',
+                phone: '12345678901'
+            }).then(done);
+
+            return;
 
             initStaff()
                 .then(initService)

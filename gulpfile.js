@@ -12,8 +12,11 @@ var jsSrc = 'templates/javascripts/',
 require('dotenv').config();
 
 gulp.task('style', function () {
-    var src = gulp.src(cssSrc + 'aui/*')
+    gulp.src(cssSrc + 'aui/*')
         .pipe(gulp.dest(cssDest + 'aui'));
+
+    gulp.src(cssSrc + 'app.css')
+        .pipe(gulp.dest(cssDest));
 })
 
 gulp.task('javascript', function () {

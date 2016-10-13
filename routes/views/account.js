@@ -1,5 +1,6 @@
 var models = require('../../models'),
-    http = require('http');
+    http = require('http'),
+    qs = require('querystring');
 
 var account = {
     name: '我是用户',
@@ -147,7 +148,7 @@ exports.phone_post = function (req, res, next) {
 
     // code verification
     var vstr = req.body.phone + req.body.code;
-    if(!req.session.vcode || req.session.vcode != vstr) {
+    if (!req.session.vcode || req.session.vcode != vstr) {
         logger.debug('binding phone failed: ' + vstr + ' [expected] ' + req.session.vcode);
 
         return res.redirect('/account/phone_fail');
@@ -232,21 +233,33 @@ exports.consume = function (req, res, next) {
 exports.phone_vcode = function (req, res, next) {
     var phone = req.params.phone,
         code = generateCode(6);
-    req.session.vcode = phone + generateCode(6);
-    var content = '美客公社验证码：' + code + '，过期无效';
+    req.session.vcode = phone + code;
+    var content = '【美客公社】美丽的顾客，您的验证码是' + code + '，五分钟内有效！';
 
     logger.debug('binding phone: ' + phone + ' code: ' + code);
+
+    var data = {
+        action: 'send',
+        useid: '',
+        account: 'szzd0076',
+        password: 'szzd0076',
+        mobile: phone,
+        content: content,
+        sendTime: '',
+        extno: ''
+    };
 
     var options = {
         hostname: 'sz.ipyy.com',
         port: 80,
-        path: '/sms.aspx?action=send&userid=&account=szzd0076&password=szzd0076&mobile=' + phone + '&content=' + content + '&sendTime=&extno=',
+        //path: '/sms.aspx?action=send&userid=&account=szzd0076&password=szzd0076&mobile=' + phone + '&content=' + content + '&sendTime=&extno=',
+        path: '/sms.aspx?' + qs.stringify(data),
         method: 'GET'
     };
 
     logger.debug(options);
 
-    http.request(options, function(result){
+    http.request(options, function (result) {
         logger.debug('STATUS: ' + result.statusCode);
         logger.debug('HEADERS: ' + JSON.stringify(result.headers));
         result.setEncoding('utf8');

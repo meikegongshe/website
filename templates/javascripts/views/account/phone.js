@@ -18,8 +18,9 @@ exports.init = function () {
 
             vcode.css('color', 'gray');
             var num = 60;
+            vcode.text('已发送(' + num-- + ')');
             var timer = window.setInterval(function () {
-                vcode.text('验证码已发送(' + num-- + ')');
+                vcode.text('已发送(' + num-- + ')');
                 if (num == 0) {
                     window.clearInterval(timer);
                     vcode.text('发送验证码');

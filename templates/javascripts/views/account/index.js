@@ -33,4 +33,11 @@ exports.init = function () {
             location.href = '/manage';
         })
     }
+
+    var manage = $('#user-consume');
+    if (manage) {
+        manage.click(function () {
+            location.href = '/manage/consume';
+        })
+    }
 };
