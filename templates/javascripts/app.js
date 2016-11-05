@@ -22,4 +22,10 @@ $('document').ready(function () {
     user_order.init();
     pay.init();
     user_pay.init();
+
+    var skin = new auiSkin({
+        name:"make",
+        skinPath:'/styles/aui/aui-skin-make.css',
+        default:true
+    })
 });

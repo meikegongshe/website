@@ -193,7 +193,7 @@ exports.pay = function (req, res, next) {
 
 exports.pay_success = function (req, res, next) {
     // generate consumer code
-    generateCode(function (err, code) {
+    generateConsumeCode(function (err, code) {
         if (err) return next(err);
 
         models.order.update({_id: req.params.id}, {

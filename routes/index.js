@@ -2,7 +2,7 @@ var express = require('express'),
     router = express.Router(),
     passport = require('passport'),
     middleware = require('./middleware');
-    manage = require('./views/manage'),
+manage = require('./views/manage'),
     home = require('./views/home'),
     shop = require('./views/shop'),
     commune = require('./views/commune'),
@@ -45,6 +45,11 @@ router.get('/account/phone_fail', middleware.auth, account.phone_fail);
 router.get('/account/pay/success/:id', middleware.auth, account.pay_success);
 router.get('/account/pay/fail/:id', middleware.auth, account.pay_fail);
 router.get('/account/pay/:id', middleware.auth, account.pay);
+router.post('/account/pay/notify', function (req, res) {
+    logger.debug(req.body);
+
+    return res.send(req.body);
+});
 router.get('/account/consume/:id', middleware.auth, account.consume);
 
 //router.use('/manage', manage);
