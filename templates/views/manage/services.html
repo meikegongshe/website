@@ -9,7 +9,7 @@
         </li>
         {% if shop.services.length > 0 %}
         {% for service in shop.services %}
-        <li class="aui-list-item aui-list-item-middle">
+        <li class="aui-list-item aui-list-item-middle" onclick="location.href='/manage/service/{{ service._id.toString() }}'">
             <div class="aui-media-list-item-inner">
                 <div class="aui-list-item-media" style="width: 3rem;">
                     <img src="{{ service.icon }}" class="aui-img-round aui-list-img-sm">

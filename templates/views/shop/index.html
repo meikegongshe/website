@@ -8,10 +8,22 @@
     {{ m_slide.slide('page-slide', shop.images) }}
 
     <ul class="aui-list aui-list-in">
-        <li class="aui-list-item" style="background-color: #666; line-height: 2.5rem;">
-            <div class="aui-list-item-title" style="color: white">{{ shop.name }}</div>
+        <li class="aui-list-item" style="line-height: 2.5rem;">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-title">{{ shop.name }}</div>
+            </div>
         </li>
-        <li class="aui-list-item"
+        <li class="aui-list-item">
+            <div class="aui-list-item-inner">
+                <div class="aui-list-item-title" onclick="location.href='http://apis.map.qq.com/tools/poimarker?type=0&marker=coord:{{ shop.location_x }},{{ shop.location_y }};title:{{ shop.name }};addr:{{ shop.address }}&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp'">
+                    <i class="aui-iconfont aui-icon-location"></i> {{ shop.address }}
+                </div>
+                <div class="aui-list-item-right aui-border-l">
+                    <a href="tel://{{ shop.phone }}"><i class="aui-iconfont aui-icon-phone aui-margin-l-15"></i></a>
+                </div>
+            </div>
+        </li>
+        <!--<li class="aui-list-item"
             onclick="location.href='http://apis.map.qq.com/tools/poimarker?type=0&marker=coord:{{ shop.location_x }},{{ shop.location_y }};title:{{ shop.name }};addr:{{ shop.address }}&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp'">
             <div class="aui-list-item-label-icon">
                 <i class="aui-iconfont aui-icon-location"></i>
@@ -28,7 +40,7 @@
                 <a href="tel://{{ shop.phone }}">{{ shop.phone }}</a>
             </div>
         </li>
-        <!--<li class="aui-list-header">店铺简介</li>
+        <li class="aui-list-header">店铺简介</li>
         <li class="aui-list-item">
             <div class="aui-list-item-text aui-padded-t-5 aui-padded-b-5">{{ shop.intro }}</div>
         </li>-->

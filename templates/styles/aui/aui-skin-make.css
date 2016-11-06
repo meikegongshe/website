@@ -7,7 +7,7 @@
  */
  /*body背景色及色值*/
  body {
- 	color: #d1d1d1;
+ 	color: #212121;
 	background-color: #f5f5f5;
 }
  p {
@@ -66,54 +66,55 @@ a {
     background-color: #ffffff;
 }
 /*tab选中时样式*/
-.aui-tab .aui-tab-item.active {
+.aui-tab .aui-tab-item.aui-active {
     color: #039be5;
     border-bottom: 2px solid #039be5;
 }
 /*单选选中样式*/
 .aui-radio:checked,
 .aui-radio.aui-checked {
-	background-color: #edfb3f;
-    border: solid 1px #edfb3f;
+	background-color: #03a9f4;
+    border: solid 1px #03a9f4;
 }
 /* 单选选中时中间对号颜色*/
 .aui-radio:checked:before,
 .aui-radio.aui-checked:before,
 .aui-radio:checked:after,
 .aui-radio.aui-checked:after {
-	border-color: #212121;
+	border-color: #ffffff;
 }
 /*多选选中样式*/
 .aui-checkbox:checked,
 .aui-checkbox.aui-checked {
-	background-color: #edfb3f;
-    border: solid 1px #edfb3f;
+	background-color: #03a9f4;
+    border: solid 1px #03a9f4;
 }
 /* 多选选中时中间对号颜色*/
 .aui-checkbox:checked:before,
 .aui-checkbox.aui-checked:before,
 .aui-checkbox:checked:after,
 .aui-checkbox.aui-checked:after{
-	border-color: #212121;
+	border-color: #ffffff;
 }
 /*滑动开关*/
 .aui-switch:checked {
-    border-color: #edfb3f;
-    background-color: #edfb3f;
+    border-color: #03a9f4;
+    background-color: #03a9f4;
 }
+/*滑动开关圆圈颜色*/
 .aui-switch:before {
-	background-color: #212121;
+	background-color: #ffffff;
 }
 /*顶部导航栏*/
 .aui-bar-nav {
-	background-color: #00bbd4;
-	color: #212121;
+	background-color: #03a9f4;
+	color: #ffffff;
 }
 .aui-bar-nav .aui-iconfont {
-	color: #212121;
+	color: #ffffff;
 }
 .aui-bar-nav .aui-btn .aui-iconfont {
-	color: #212121;
+	color: #ffffff;
 }
 /*浅色顶部导航拦*/
 .aui-bar-light {
@@ -132,16 +133,16 @@ a {
 	color: #757575;
 }
 /*底部工具栏选中时颜色*/
-.aui-bar-tab .active {
+.aui-bar-tab .aui-active {
 	color: #039be5;
 }
 /*按钮工具栏*/
 .aui-bar-btn .aui-bar-btn-item {
-	border-color: #edfb3f;
-	color: #edfb3f;
+	border-color: #03a9f4;
+	color: #212121;
 }
-.aui-bar-btn .aui-bar-btn-item.active {
-    background-color: #edfb3f;
+.aui-bar-btn .aui-bar-btn-item.aui-active {
+    background-color: #03a9f4;
     color: #ffffff;
 }
 /*顶部导航存在按钮组工具栏时样式*/
@@ -153,12 +154,12 @@ a {
     border-color: #03a9f4;
 }
 /*顶部导航存在按钮组工具栏时选中样式*/
-.aui-bar-nav .aui-bar-btn .aui-bar-btn-item.active {
+.aui-bar-nav .aui-bar-btn .aui-bar-btn-item.aui-active {
     background-color: #ffffff;
     color: #03a9f4;
 }
 /*浅色顶部导航存在按钮组工具栏时选中样式*/
-.aui-bar-nav.aui-bar-light .aui-bar-btn .aui-bar-btn-item.active {
+.aui-bar-nav.aui-bar-light .aui-bar-btn .aui-bar-btn-item.aui-active {
     background-color: #03a9f4;
     color: #ffffff;
 }
@@ -168,7 +169,7 @@ a {
 }
 /*进度条色带*/
 .aui-progress .aui-progress-bar {
-	background-color: #eefb3f;
+	background-color: #03a9f4;
 }
 /*滑块*/
 .aui-range input[type='range']{
@@ -177,8 +178,8 @@ a {
 }
 .aui-range input[type='range']::-webkit-slider-thumb {
 	/*滑块圆圈样式*/
-	border-color: #edfb3f;
-    background-color: #edfb3f;
+	border-color: #03a9f4;
+    background-color: #03a9f4;
 }
 /*提示条*/
 .aui-tips {
@@ -191,39 +192,39 @@ a {
 }
 /*列表背景色*/
 .aui-list .aui-list-item {
-	color: #d1d1d1;
-    background-color: #1a1a1a;
+	color: #212121;
+    background-color: #ffffff;
 }
 /*列表头部*/
 .aui-list .aui-list-header {
-	background-color: #242424;
-    color: #9e9e9e;
+	background-color: #e0e0e0;
+    color: #212121;
 }
 /*列表项内Ttitle标题*/
 .aui-list .aui-list-item-title {
 	font-size: 0.8rem;
-	color: #d1d1d1;
+	color: #212121;
 }
 /*列表文本区域字体*/
 .aui-list .aui-list-item-text {
 	font-size: 0.7rem;
-	color: #d1d1d1;
+	color: #757575;
 }
 /*列表右侧箭头*/
 .aui-list-item-arrow:before {
-	border-color: #edfb3f;
+	border-color: #dddddd;
 }
 /*列表右侧其他信息字体颜色*/
 .aui-list .aui-list-item-right,
 .aui-list-item-title-row em {
-	color: #edfb3f;
+	color: #757575;
 }
 /*列表线条颜色*/
 .aui-list:before,
 .aui-list:after,
 .aui-list .aui-list-item:after,
 .aui-list.aui-list-in .aui-list-item-inner:after {
-	background-color: #242424;
+	background-color: #dddddd;
 }
 /*列表项点击颜色*/
 .aui-list .aui-list-item:active {
@@ -236,7 +237,7 @@ a {
 /*列表内label、icon字体颜色*/
 .aui-list .aui-list-item-label,
 .aui-list .aui-list-item-label-icon {
-	color: #d1d1d1;
+	color: #212121;
 }
 /*卡片列表顶部字体*/
 .aui-card-list-header {

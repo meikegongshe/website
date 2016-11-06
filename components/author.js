@@ -9,7 +9,7 @@ passport.use(new wechatStrategy({
     client: 'wechat',
     scope: 'snsapi_userinfo',
     state: 'meike',
-    callbackURL: 'http://www.v-wisdom.com/auth/wechat/callback'
+    callbackURL: 'http://www.meikes.cn/auth/wechat/callback'
 }, function (accessToken, refreshToken, profile, expires_in, done) {
     var models = require('../models');
 

@@ -29,7 +29,7 @@ exports.shop = function (req, res, next) {
     }
 };
 
-exports.shop_create = function (req, res, next) {
+function createShop(req) {
     logger.debug(req.body);
 
     // TODO: add verification
@@ -46,7 +46,11 @@ exports.shop_create = function (req, res, next) {
     });
     shop.images = images;
 
-    models.shop.create(shop, function (err) {
+    return shop;
+}
+
+exports.shop_create = function (req, res, next) {
+    models.shop.create(createShop(req), function (err) {
         if (err) return next(err);
 
         return res.redirect('/manage');
@@ -54,11 +58,15 @@ exports.shop_create = function (req, res, next) {
 };
 
 exports.shop_update = function (req, res) {
+    models.shop.update({_id: req.body._id}, createShop(req), function (err) {
+        if (err) return next(err);
 
+        return res.redirect('/manage');
+    })
 };
 
 exports.shop_delete = function (req, res) {
-
+    // TODO: delete a shop
 };
 
 exports.staffs = function (req, res, next) {
@@ -95,7 +103,7 @@ exports.staff = function (req, res, next) {
     }
 };
 
-exports.staff_create = function (req, res, next) {
+function createStaff(req) {
     logger.debug(req.body);
 
     // TODO: add verification
@@ -105,7 +113,12 @@ exports.staff_create = function (req, res, next) {
         portrait: req.body.portrait,
         shop: req.params.id
     };
-    models.staff.create(staff, function (err, result) {
+
+    return staff;
+};
+
+exports.staff_create = function (req, res, next) {
+    models.staff.create(createStaff(req), function (err, result) {
         if (err) return next(err);
 
         logger.debug(result.toObject());
@@ -118,7 +131,11 @@ exports.staff_create = function (req, res, next) {
 };
 
 exports.staff_update = function (req, res, next) {
+    models.staff.update({_id: req.body._id}, createStaff(req), function (err) {
+        if (err) return next(err);
 
+        return res.redirect('/manage');
+    })
 };
 
 exports.services = function (req, res, next) {
@@ -165,10 +182,10 @@ exports.service = function (req, res, next) {
     }
 };
 
-exports.service_create = function (req, res, next) {
+function createService(req) {
     logger.debug(req.body);
 
-    var service = {
+    return {
         name: req.body.name,
         enabled: req.body.enabled == 'on',
         icon: req.body.icon,
@@ -179,7 +196,10 @@ exports.service_create = function (req, res, next) {
         shop: req.params.id,
         staffs: req.body.staffs
     };
-    models.service.create(service, function (err, result) {
+};
+
+exports.service_create = function (req, res, next) {
+    models.service.create(createStaff(req), function (err, result) {
         if (err) return next(err);
 
         logger.debug(result.toObject());
@@ -192,7 +212,16 @@ exports.service_create = function (req, res, next) {
 };
 
 exports.service_update = function (req, res, next) {
+    var service = createStaff(req);
 
+    // TODO: update staffs, current ignore staffs
+    delete service.staffs
+
+    models.service.update({_id: req.body._id}, service, function (err) {
+        if (err) return next(err);
+
+        return res.redirect('/manage');
+    })
 };
 
 exports.consumes = function (req, res, next) {

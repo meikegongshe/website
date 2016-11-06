@@ -38,7 +38,7 @@
         </ul>
     </div>
     {% if staff %}
-    <input name="_id" type="hidden" value="{{ staff._id }}">
+    <input name="_id" type="hidden" value="{{ staff._id.toString() }}">
     {% endif %}
 </form>
 
