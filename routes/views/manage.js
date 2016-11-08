@@ -214,12 +214,14 @@ exports.service_create = function (req, res, next) {
 exports.service_update = function (req, res, next) {
     var service = createStaff(req);
 
-    // TODO: update staffs, current ignore staffs
-    delete service.staffs
+    // TODO: update shop and staffs, current ignore staffs
+    delete service.shop;
+    delete service.staffs;
 
     models.service.update({_id: req.body._id}, service, function (err) {
         if (err) return next(err);
 
+        // BUG: should return to services page
         return res.redirect('/manage');
     })
 };
