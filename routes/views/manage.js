@@ -193,6 +193,7 @@ function createService(req) {
         price: parseInt(req.body.price),
         original: parseInt(req.body.original),
         intro: req.body.intro,
+        images: [req.body.images],
         shop: req.params.id,
         staffs: req.body.staffs
     };
@@ -212,7 +213,7 @@ exports.service_create = function (req, res, next) {
 };
 
 exports.service_update = function (req, res, next) {
-    var service = createStaff(req);
+    var service = createService(req);
 
     // TODO: update shop and staffs, current ignore staffs
     delete service.shop;
