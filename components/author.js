@@ -41,6 +41,7 @@ passport.use(new wechatStrategy({
                         if (err) return done(err, null);
 
                         account.openid = profile.openid;
+                        account.accessToken = accessToken;
                         return done(null, account);
                     })
                 })
@@ -52,6 +53,7 @@ passport.use(new wechatStrategy({
                     if (err) return done(err, null);
 
                     account.openid = profile.openid;
+                    account.accessToken = accessToken;
                     return done(null, account);
                 })
             }
@@ -59,7 +61,7 @@ passport.use(new wechatStrategy({
 }));
 
 passport.serializeUser(function (user, done) {
-    done(null, [user._id.toString(), user.openid].join(','));
+    done(null, [user._id.toString(), user.openid, user.accessToken].join(','));
 });
 
 passport.deserializeUser(function (id, done) {
@@ -68,6 +70,7 @@ passport.deserializeUser(function (id, done) {
         if (err) return done(err, null);
 
         account.openid = ids[1];
+        account.accessToken = ids[2];
         done(null, account);
     })
 });

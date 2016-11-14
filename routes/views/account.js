@@ -1,5 +1,6 @@
 var models = require('../../models'),
     http = require('http'),
+    https = require('https'),
     qs = require('querystring');
 
 var account = {
@@ -270,6 +271,80 @@ exports.phone_vcode = function (req, res, next) {
 
     return res.json();
 };
+
+exports.market_code = function (req, res, next) {
+    // check code, if expired, generate a random number for account key
+    if (req.user.ticket && req.user.expireDate > Date.now()) {
+        getBinaryCode(req.user.ticket, res);
+    } else {
+        generateBinaryCode(req, function (err) {
+            if (err) return next(err);
+
+            getBinaryCode(req.user.ticket, res);
+        });
+    }
+};
+
+function getBinaryCode(ticket, res) {
+    return res.redirect('https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' + encodeURI(ticket));
+}
+
+function generateBinaryCode(req, callback) {
+    var content = JSON.stringify({
+        "expire_seconds": 604800,
+        "action_name": "QR_SCENE",
+        "action_info": {
+            "scene": {
+                "scene_id": parseInt(req.user._id.toString(), 16).toLocaleString().replace(/,/g, '')
+            }
+        }
+    });
+
+    logger.debug(content);
+
+    var options = {
+        hostname: 'api.weixin.qq.com',
+        port: 443,
+        path: '/cgi-bin/qrcode/create?access_token=' + req.user.accessToken,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json; charset=UTF-8',
+            'Content-Length': content.length
+        }
+    };
+
+    logger.debug(options);
+
+    var request = https.request(options, function (result) {
+        logger.debug('STATUS: ' + result.statusCode);
+        logger.debug('HEADERS: ' + JSON.stringify(result.headers));
+        result.setEncoding('utf8');
+        result.on('data', function (chunk) {
+            logger.debug('BODY: ' + chunk);
+
+            var result = JSON.parse(chunk);
+
+            req.user.ticket = result.ticket;
+            req.user.expireDate = new Date(Date.now() + result.expire_seconds * 1000);
+
+            models.account.update({_id: req.user._id}, {
+                ticket: req.user.ticket,
+                expireDate: req.user.expireDate
+            }, callback);
+        });
+    });
+
+    request.on('error', function (e) {
+        logger.debug('problem with request: ' + e.message);
+
+        callback(new Error(e.message));
+    });
+
+    // write data to request body
+    request.write(content);
+
+    request.end();
+}
 
 function generateCode(count) {
     var code = '';

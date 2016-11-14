@@ -200,7 +200,7 @@ function createService(req) {
 };
 
 exports.service_create = function (req, res, next) {
-    models.service.create(createStaff(req), function (err, result) {
+    models.service.create(createService(req), function (err, result) {
         if (err) return next(err);
 
         logger.debug(result.toObject());

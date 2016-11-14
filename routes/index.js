@@ -51,6 +51,7 @@ router.post('/account/pay/notify', function (req, res) {
     return res.send(req.body);
 });
 router.get('/account/consume/:id', middleware.auth, account.consume);
+router.get('/account/market/code', middleware.auth, account.market_code);
 
 //router.use('/manage', manage);
 

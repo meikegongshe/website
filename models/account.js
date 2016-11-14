@@ -8,7 +8,9 @@ var schema = new mongoose.Schema({
     parent: [{type: mongoose.Schema.Types.ObjectId, ref: 'account'}],
     points: {type: Number, default: 0},
     records: {type: Number, default: 0},
-    added: {type: Date, default: Date.now}
+    added: {type: Date, default: Date.now},
+    ticket: {type: String},
+    expireDate: {type: Date}
 });
 
 mongoose.model('account', schema);
