@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var express = require('express'),
     session = require('express-session'),
     path = require('path'),
@@ -11,8 +13,6 @@ var express = require('express'),
     lodash = require('lodash'),
     author = require('./components/author'),
     server = require('./components/server');
-
-require('dotenv').config();
 
 var loggerTypes = lodash.split(process.env.LOGGER_TYPES, ',');
 var logTypeConfigs = [];

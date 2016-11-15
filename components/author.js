@@ -1,7 +1,8 @@
 'use strict';
 
 var passport = require('passport'),
-    wechatStrategy = require('passport-wechat').Strategy;
+    wechatStrategy = require('passport-wechat').Strategy,
+    models = require('../models');
 
 passport.use(new wechatStrategy({
     appID: 'wx8c0b9d8b32234d7a',
@@ -9,10 +10,16 @@ passport.use(new wechatStrategy({
     client: 'wechat',
     scope: 'snsapi_userinfo',
     state: 'meike',
-    callbackURL: 'http://www.meikes.cn/auth/wechat/callback'
+    callbackURL: 'http://www.meikes.cn/auth/wechat/callback',
+    getToken: function (openid, callback) {
+        logger.debug('get access token, openid: ' + openid);
+        models.wechatToken.getToken(openid, callback);
+    },
+    saveToken: function (openid, token, callback) {
+        logger.debug('set access token, openid: ' + openid + ' token: ' + token);
+        models.wechatToken.setToken(openid, token, callback);
+    }
 }, function (accessToken, refreshToken, profile, expires_in, done) {
-    var models = require('../models');
-
     logger.debug("access token:" + accessToken);
     logger.debug("refresh token:" + refreshToken);
     logger.debug("profile:" + JSON.stringify(profile));

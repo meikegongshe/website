@@ -22,3 +22,24 @@ schema = new mongoose.Schema({
 });
 
 mongoose.model('thirdAccount', schema);
+
+schema = new mongoose.Schema({
+    access_token: {type: String},
+    expires_in: {type: Number},
+    refresh_token: {type: String},
+    openid: {type: String},
+    scope: {type: String},
+    create_at: {type: String}
+});
+
+schema.statics.getToken = function (openid, callback) {
+    this.findOne({openid: openid}, callback);
+};
+
+schema.statics.setToken = function (openid, token, callback) {
+    var query = {openid: openid};
+    var options = {upsert: true};
+    this.update(query, token, options, callback);
+};
+
+mongoose.model('wechatToken', schema);

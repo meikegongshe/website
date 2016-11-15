@@ -21,4 +21,5 @@ exports.service = mongoose.model('service');
 exports.staff = mongoose.model('staff');
 exports.account = mongoose.model('account');
 exports.thirdAccount = mongoose.model('thirdAccount');
+exports.wechatToken = mongoose.model('wechatToken');
 exports.order = mongoose.model('order');
