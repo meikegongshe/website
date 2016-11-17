@@ -1,6 +1,7 @@
 var express = require('express'),
     router = express.Router(),
     passport = require('passport'),
+    wechat = require('./wechat'),
     middleware = require('./middleware');
 manage = require('./views/manage'),
     home = require('./views/home'),
@@ -85,5 +86,15 @@ router.get('/wechat/verify', function (req, res, next) {
 
     return res.send(echostr);
 });
+
+router.post('/wechat/verify', function (req, res, next) {
+    logger.debug(JSON.stringify(req.query));
+    logger.debug(JSON.stringify(req.data));
+
+    return res.send('Done');
+});
+
+// wechat events
+router.get('/wechat/menu/create', middleware.auth_manager, wechat.menu_create);
 
 exports = module.exports = router;

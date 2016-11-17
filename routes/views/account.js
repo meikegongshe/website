@@ -286,7 +286,10 @@ exports.market_code = function (req, res, next) {
 };
 
 function getBinaryCode(ticket, res) {
-    return res.redirect('https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' + encodeURI(ticket));
+    return res.render('account/binary', {
+        title: '推广二维码',
+        image: 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' + encodeURI(ticket)
+    });
 }
 
 function generateBinaryCode(req, callback) {
@@ -322,10 +325,10 @@ function generateBinaryCode(req, callback) {
         result.on('data', function (chunk) {
             logger.debug('BODY: ' + chunk);
 
-            var result = JSON.parse(chunk);
+            var resultData = JSON.parse(chunk);
 
-            req.user.ticket = result.ticket;
-            req.user.expireDate = new Date(Date.now() + result.expire_seconds * 1000);
+            req.user.ticket = resultData.ticket;
+            req.user.expireDate = new Date(Date.now() + resultData.expire_seconds * 1000);
 
             models.account.update({_id: req.user._id}, {
                 ticket: req.user.ticket,

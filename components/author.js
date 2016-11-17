@@ -2,11 +2,15 @@
 
 var passport = require('passport'),
     wechatStrategy = require('passport-wechat').Strategy,
-    models = require('../models');
+    models = require('../models'),
+    https = require('https');
+
+var appId = 'wx8c0b9d8b32234d7a',
+    appSecret = 'cd9012a9fd503dc46ca28fae50a5e608';
 
 passport.use(new wechatStrategy({
-    appID: 'wx8c0b9d8b32234d7a',
-    appSecret: 'cd9012a9fd503dc46ca28fae50a5e608',
+    appID: appId,
+    appSecret: appSecret,
     client: 'wechat',
     scope: 'snsapi_userinfo',
     state: 'meike',
@@ -16,7 +20,7 @@ passport.use(new wechatStrategy({
         models.wechatToken.getToken(openid, callback);
     },
     saveToken: function (openid, token, callback) {
-        logger.debug('set access token, openid: ' + openid + ' token: ' + token);
+        logger.debug('set access token, openid: ' + openid + ' token: ' + JSON.stringify(token));
         models.wechatToken.setToken(openid, token, callback);
     }
 }, function (accessToken, refreshToken, profile, expires_in, done) {
@@ -26,45 +30,48 @@ passport.use(new wechatStrategy({
 
     if (!profile || !profile.openid) return done('Auth failed', null);
 
-    // find account
-    models.thirdAccount.findOne({uid: profile.openid})
-        .populate('account')
-        .exec(function (err, thirdAccount) {
-            if (err) return done(err, null);
+    // get web access token
+    getAccessToken(function (tokenData) {
+        // find account
+        models.thirdAccount.findOne({uid: profile.openid})
+            .populate('account')
+            .exec(function (err, thirdAccount) {
+                if (err) return done(err, null);
 
-            if (!thirdAccount) {
-                // create account
-                models.account.create({
-                    name: profile.nickname,
-                    portrait: profile.headimgurl
-                }, function (err, account) {
-                    if (err) return done(err, null);
+                if (!thirdAccount) {
+                    // create account
+                    models.account.create({
+                        name: profile.nickname,
+                        portrait: profile.headimgurl
+                    }, function (err, account) {
+                        if (err) return done(err, null);
 
-                    models.thirdAccount.create({
-                        type: 'wechat',
-                        uid: profile.openid,
-                        account: account
-                    }, function (err) {
+                        models.thirdAccount.create({
+                            type: 'wechat',
+                            uid: profile.openid,
+                            account: account
+                        }, function (err) {
+                            if (err) return done(err, null);
+
+                            account.openid = profile.openid;
+                            account.accessToken = tokenData.access_token;
+                            return done(null, account);
+                        })
+                    })
+                } else {
+                    // update name and portrait
+                    thirdAccount.account.name = profile.nickname;
+                    thirdAccount.account.portrait = profile.headimgurl;
+                    thirdAccount.account.save(function (err, account) {
                         if (err) return done(err, null);
 
                         account.openid = profile.openid;
-                        account.accessToken = accessToken;
+                        account.accessToken = tokenData.access_token;
                         return done(null, account);
                     })
-                })
-            } else {
-                // update name and portrait
-                thirdAccount.account.name = profile.nickname;
-                thirdAccount.account.portrait = profile.headimgurl;
-                thirdAccount.account.save(function (err, account) {
-                    if (err) return done(err, null);
-
-                    account.openid = profile.openid;
-                    account.accessToken = accessToken;
-                    return done(null, account);
-                })
-            }
-        })
+                }
+            })
+    });
 }));
 
 passport.serializeUser(function (user, done) {
@@ -82,7 +89,33 @@ passport.deserializeUser(function (id, done) {
     })
 });
 
+function getAccessToken(callback) {
+    var options = {
+        hostname: 'api.weixin.qq.com',
+        port: 443,
+        path: '/cgi-bin/token?' + require('querystring').stringify({
+            grant_type: 'client_credential',
+            appid: appId,
+            secret: appSecret
+        }),
+        method: 'GET'
+    };
+
+    logger.debug(options);
+
+    https.request(options, function (result) {
+        logger.debug('STATUS: ' + result.statusCode);
+        logger.debug('HEADERS: ' + JSON.stringify(result.headers));
+        result.setEncoding('utf8');
+        result.on('data', function (chunk) {
+            logger.debug('BODY: ' + chunk);
+
+            return callback(JSON.parse(chunk))
+        });
+    }).end();
+}
+
 exports = module.exports = function (app) {
     app.use(passport.initialize());
     app.use(passport.session());
-}
+};
