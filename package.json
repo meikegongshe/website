@@ -22,7 +22,8 @@
     "redis": "^2.6.1",
     "serve-favicon": "^2.3.0",
     "swig": "latest",
-    "weixin-pay": "^1.1.7"
+    "weixin-pay": "^1.1.7",
+    "xml2json": "^0.10.0"
   },
   "scripts": {
     "start": "node ./app.js"

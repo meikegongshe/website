@@ -2,8 +2,8 @@ var express = require('express'),
     router = express.Router(),
     passport = require('passport'),
     wechat = require('./wechat'),
-    middleware = require('./middleware');
-manage = require('./views/manage'),
+    middleware = require('./middleware'),
+    manage = require('./views/manage'),
     home = require('./views/home'),
     shop = require('./views/shop'),
     commune = require('./views/commune'),
@@ -88,10 +88,12 @@ router.get('/wechat/verify', function (req, res, next) {
 });
 
 router.post('/wechat/verify', function (req, res, next) {
-    logger.debug(JSON.stringify(req.query));
-    logger.debug(JSON.stringify(req.data));
+    // TODO: verify signature
+    req.on('data', function (data) {
+        logger.debug(data.toString());
 
-    return res.send('Done');
+        wechat.handler(data, res, next);
+    });
 });
 
 // wechat events
