@@ -24,18 +24,17 @@ exports.handler = function (data, res, next) {
     var action = JSON.parse(xmlParser.toJson(data)).xml;
     logger.debug('received data: ' + JSON.stringify(action));
 
-    var content = '';
+    var xmlContent = '';
 
     if (action.MsgType == 'text' && action.Content == '来一发') {
-        content = '';
+        xmlContent = textMessage(action, 'http://www.meikes.cn/auth/wechat/');
     } else if (action.MsgType == 'event' && action.EventKey == 'member_center') {
-        content = '美丽的顾客：\r\n欢迎关注美客公社 / MakerCommune，我们不推销、不办卡、不玩套路，只想真诚地为您创造美丽和服务，因为我们相信您的口碑分享必将创造价值。在线预约及拓客返利功能正在调试中，故暂且使用点评下单预约，敬请期待！\r\n美丽预约：15899878877 15889552280\r\n美业商家加盟请联系微信：edo-design';
+        xmlContent = textMessage(action, '美丽的顾客：\r\n欢迎关注美客公社 / MakerCommune，我们不推销、不办卡、不玩套路，只想真诚地为您创造美丽和服务，因为我们相信您的口碑分享必将创造价值。在线预约及拓客返利功能正在调试中，故暂且使用点评下单预约，敬请期待！\r\n美丽预约：15899878877 15889552280\r\n美业商家加盟请联系微信：edo-design');
     }
 
-
-    logger.debug('return data: ' + textMessage(action, content));
+    logger.debug('return data: ' + xmlContent);
     res.set({'Content-Type': 'text/xml'});
-    return res.send(textMessage(action, content));
+    return res.send(xmlContent);
 };
 
 exports.menu_create = function (req, res, next) {
