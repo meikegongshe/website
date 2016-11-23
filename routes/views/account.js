@@ -193,24 +193,40 @@ exports.pay = function (req, res, next) {
 };
 
 exports.pay_success = function (req, res, next) {
-    // generate consumer code
-    generateConsumeCode(function (err, code) {
+    models.order.findOne({_id: req.params.id}, function (err, order) {
         if (err) return next(err);
+        if (!order) return next(new Error('Cannot find correct order'));
 
-        models.order.update({_id: req.params.id}, {
-            $set: {
-                code: code,
-                paid: Date.now(),
-                state: 'unused'
-            }
-        }, function (err) {
-            if (err) return next(err);
+        // TODO: lock record to avoid dup update
+        if (order.state == 'unpaid') {
+            // generate consumer code
+            generateConsumeCode(function (err, code) {
+                if (err) return next(err);
 
+                models.order.findByIdAndUpdate(req.params.id, {
+                    $set: {
+                        code: code,
+                        paid: Date.now(),
+                        state: 'unused'
+                    }
+                }, function (err, order) {
+                    if (err) return next(err);
+
+                    // update account points
+                    models.account.findByIdAndUpdate(req.user._id, {$inc: {points: order.price}}, function () {
+                        return res.render('account/pay_success', {
+                            title: '支付成功',
+                            code: code
+                        })
+                    });
+                })
+            })
+        } else {
             return res.render('account/pay_success', {
                 title: '支付成功',
-                code: code
+                code: order.code
             })
-        })
+        }
     })
 };
 
@@ -273,7 +289,7 @@ exports.phone_vcode = function (req, res, next) {
 };
 
 exports.market_code = function (req, res, next) {
-    // check code, if expired, generate a random number for account key
+    // check code, if expired, get a new ticket
     if (req.user.ticket && req.user.expireDate > Date.now()) {
         getBinaryCode(req.user.ticket, res);
     } else {

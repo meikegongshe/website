@@ -49,7 +49,8 @@ router.get('/account/pay/:id', middleware.auth, account.pay);
 router.post('/account/pay/notify', function (req, res) {
     logger.debug(req.body);
 
-    return res.send(req.body);
+    // TODO: verify order and update state
+    return res.send('OK');
 });
 router.get('/account/consume/:id', middleware.auth, account.consume);
 router.get('/account/market/code', middleware.auth, account.market_code);
