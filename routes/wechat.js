@@ -39,18 +39,45 @@ exports.handler = function (data, res, next) {
             return res.send(xmlContent);
         } else if (action.Event == 'subscribe') {
             logger.debug('ticket: ' + action.Ticket);
-            models.account.findOne({ticket: action.Ticket}, function (err, account) {
+            logger.debug('event key: ' + action.EventKey);
+
+            var key = action.EventKey.substring('qrscene_'.length);
+            var count = 99 - parseInt(key.substring(0, 2));
+            var leftNum = Number(key.substring(2, count + 2)).toString(16),
+                rightNum = Number(key.substring(2 + count)).toString(16);
+            var id = leftNum + rightNum;
+
+            logger.debug('user id: ' + id);
+
+            models.account.findById(id, function (err, account) {
                 if (err) return next(err);
 
                 if (!account) {
-                    // BUG: ticket already is expired
-                    console.warn('ticket cannot find, ignore the ticket.');
+                    // ignore subscribe and create user
+                    console.warn('cannot find user, ignore.');
+                    xmlContent = textMessage(action, '');
+                    logger.debug('return data: ' + xmlContent);
+                    return res.send(xmlContent);
                 } else {
-                    models.account
-                }
+                    models.account.create({
+                        name: 'user_' + Date().toString(),
+                        parent: account
+                    }, function (err, account) {
+                        if (err) return next(err);
 
-                logger.debug('return data: ' + xmlContent);
-                return res.send(xmlContent);
+                        models.thirdAccount.create({
+                            type: 'wechat',
+                            uid: action.FromUserName,
+                            account: account
+                        }, function (err) {
+                            if (err) return next(err);
+
+                            xmlContent = textMessage(action, '');
+                            logger.debug('return data: ' + xmlContent);
+                            return res.send(xmlContent);
+                        })
+                    });
+                }
             });
         }
     } else {

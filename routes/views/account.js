@@ -309,12 +309,16 @@ function getBinaryCode(ticket, res) {
 }
 
 function generateBinaryCode(req, callback) {
+    var idStr = req.user._id.toString();
+    var leftNum = parseInt(idStr.substring(0, 12), 16).toString(), rightNum = parseInt(idStr.substring(12, 24), 16).toString();
+    var key = (99 - leftNum.length) + leftNum + rightNum;
+
     var content = JSON.stringify({
         "expire_seconds": 604800,
         "action_name": "QR_SCENE",
         "action_info": {
             "scene": {
-                "scene_id": parseInt(req.user._id.toString(), 16).toLocaleString().replace(/,/g, '')
+                "scene_id": key
             }
         }
     });
