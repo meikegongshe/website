@@ -41,44 +41,56 @@ exports.handler = function (data, res, next) {
             logger.debug('ticket: ' + action.Ticket);
             logger.debug('event key: ' + action.EventKey);
 
-            var key = action.EventKey.substring('qrscene_'.length);
-            var count = 99 - parseInt(key.substring(0, 2));
-            var leftNum = Number(key.substring(2, count + 2)).toString(16),
-                rightNum = Number(key.substring(2 + count)).toString(16);
-            var id = leftNum + rightNum;
+            if (action.Ticket) {
+                // if user subscribe service first time, there is no user id in event key, use ticket for finding user
+                //
+                /* var key = action.EventKey.substring('qrscene_'.length);
+                 var count = 99 - parseInt(key.substring(0, 2));
+                 var leftNum = Number(key.substring(2, count + 2)).toString(16),
+                 rightNum = Number(key.substring(2 + count)).toString(16);
+                 var id = leftNum + rightNum;
 
-            logger.debug('user id: ' + id);
+                 logger.debug('user id: ' + id); */
 
-            models.account.findById(id, function (err, account) {
-                if (err) return next(err);
+                // TODO: check ticket expiration time?
+                models.account.findOne({ticket: action.Ticket}, function (err, account) {
+                    if (err) return next(err);
 
-                if (!account) {
-                    // ignore subscribe and create user
-                    console.warn('cannot find user, ignore.');
-                    xmlContent = textMessage(action, '');
-                    logger.debug('return data: ' + xmlContent);
-                    return res.send(xmlContent);
-                } else {
-                    models.account.create({
-                        name: 'user_' + Date().toString(),
-                        parent: account
-                    }, function (err, account) {
-                        if (err) return next(err);
-
-                        models.thirdAccount.create({
-                            type: 'wechat',
-                            uid: action.FromUserName,
-                            account: account
-                        }, function (err) {
+                    if (!account) {
+                        // ignore subscribe and create user
+                        logger.warn('cannot find user, ignore.');
+                        return subscribe(action, res);
+                    } else {
+                        // ignore if user already exist
+                        models.thirdAccount.count({uid: action.FromUserName}, function (err, count) {
                             if (err) return next(err);
 
-                            xmlContent = textMessage(action, '');
-                            logger.debug('return data: ' + xmlContent);
-                            return res.send(xmlContent);
-                        })
-                    });
-                }
-            });
+                            if (count > 0) {
+                                return subscribe(action, res);
+                            } else {
+                                models.account.create({
+                                    name: 'user_' + Date().toString(),
+                                    parent: account
+                                }, function (err, account) {
+                                    if (err) return next(err);
+
+                                    models.thirdAccount.create({
+                                        type: 'wechat',
+                                        uid: action.FromUserName,
+                                        account: account
+                                    }, function (err) {
+                                        if (err) return next(err);
+
+                                        return subscribe(action, res);
+                                    })
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                return subscribe(action, res);
+            }
         }
     } else {
         xmlContent = textMessage(action, '');
@@ -93,6 +105,13 @@ exports.menu_create = function (req, res, next) {
 
         return res.send('Done');
     })
+};
+
+function subscribe(action, res) {
+    logger.debug('new subscription');
+    var xmlContent = textMessage(action, '美丽的顾客：\r\n欢迎您关注美客公社 / MakerCommune，分享美丽，创造价值！\r\n美客公社，即美业顾客共同分享美丽和创造价值的社区，它是互联网+时代背景下的新型美业团体，也是集美业服务与移动社交为一体的分享平台。预约功能正在开发中，敬请关注！');
+    logger.debug('return data: ' + xmlContent);
+    return res.send(xmlContent);
 };
 
 function httpsRequest(path, method, data, callback) {

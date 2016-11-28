@@ -76,20 +76,33 @@ exports = module.exports = exports.index = function (req, res) {
     }
 };
 
-exports.member = function (req, res) {
+exports.member = function (req, res, next) {
     var id = req.params.id;
     if (id) {
-        return res.render('account/member', {
-            title: id + ' 的下级会员',
-            members: account.members,
-            footer_index: 4
+        models.account.findById(id, function (err, account) {
+            if (err) return next(err);
+            if (!account) return next(new Error('cannot find correct account'));
+
+            models.account.find({parent: account._id}, function (err, members) {
+                if (err) return next(err);
+
+                return res.render('account/member', {
+                    title: account.name + ' 的下级会员',
+                    members: members,
+                    footer_index: 4
+                })
+            });
         })
     } else {
-        return res.render('account/member', {
-            title: '我的下级会员',
-            members: account.members,
-            footer_index: 4
-        })
+        models.account.find({parent: req.user._id}, function (err, members) {
+            if (err) return next(err);
+
+            return res.render('account/member', {
+                title: '我的下级会员',
+                members: members,
+                footer_index: 4
+            })
+        });
     }
 };
 
@@ -213,7 +226,12 @@ exports.pay_success = function (req, res, next) {
                     if (err) return next(err);
 
                     // update account points
-                    models.account.findByIdAndUpdate(req.user._id, {$inc: {points: order.price}}, function () {
+                    models.account.findByIdAndUpdate(req.user._id, {
+                        $inc: {
+                            points: order.price,
+                            records: order.price
+                        }
+                    }, function () {
                         return res.render('account/pay_success', {
                             title: '支付成功',
                             code: code
