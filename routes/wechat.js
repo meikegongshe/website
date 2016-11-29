@@ -68,8 +68,9 @@ exports.handler = function (data, res, next) {
                             if (count > 0) {
                                 return subscribe(action, res);
                             } else {
+                                var user_name = action.EventKey || 'user_' + lodash.random(100000, 999999);
                                 models.account.create({
-                                    name: 'user_' + Date().toString(),
+                                    name: user_name,
                                     parent: account
                                 }, function (err, account) {
                                     if (err) return next(err);
@@ -91,11 +92,13 @@ exports.handler = function (data, res, next) {
             } else {
                 return subscribe(action, res);
             }
+        } else {
+            res.set({'Content-Type': 'text/plain'});
+            return res.send('success');
         }
     } else {
-        xmlContent = textMessage(action, '');
-        logger.debug('return data: ' + xmlContent);
-        return res.send(xmlContent);
+        res.set({'Content-Type': 'text/plain'});
+        return res.send('success');
     }
 };
 

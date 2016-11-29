@@ -29,8 +29,8 @@
                     <div class="aui-col-xs-4 aui-border-r">
                         <p>积分：{{ account.points }}</p>
                     </div>
-                    <div class="aui-col-xs-4" onclick="location.href='/account/members'">
-                        <p>下级会员：{{ account.members.length }}</p>
+                    <div class="aui-col-xs-4" {% if account.members>0 %}onclick="location.href='/account/members'"{% endif %}>
+                        <p>下级会员：{{ account.members }}</p>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,7 @@ var models = require('../../models'),
     https = require('https'),
     qs = require('querystring');
 
+// this just is test data
 var account = {
     name: '我是用户',
     role: 'user',
@@ -64,13 +65,18 @@ var account = {
 };
 
 
-exports = module.exports = exports.index = function (req, res) {
+exports = module.exports = exports.index = function (req, res, next) {
     if (req.isAuthenticated()) {
-        return res.render('account/index', {
-            title: '个人信息',
-            account: req.user,
-            footer_index: 4
-        })
+        models.account.count({parent: req.user._id}, function (err, count) {
+            if (err) return next(err);
+            req.user.members = count;
+
+            return res.render('account/index', {
+                title: '个人信息',
+                account: req.user,
+                footer_index: 4
+            })
+        });
     } else {
         return res.send("Please logon first");
     }
@@ -86,10 +92,14 @@ exports.member = function (req, res, next) {
             models.account.find({parent: account._id}, function (err, members) {
                 if (err) return next(err);
 
+                members.forEach(function (item) {
+                    item.members = '-';
+                });
+
                 return res.render('account/member', {
                     title: account.name + ' 的下级会员',
                     members: members,
-                    footer_index: 4
+                    deep: false
                 })
             });
         })
@@ -97,11 +107,34 @@ exports.member = function (req, res, next) {
         models.account.find({parent: req.user._id}, function (err, members) {
             if (err) return next(err);
 
-            return res.render('account/member', {
-                title: '我的下级会员',
-                members: members,
-                footer_index: 4
-            })
+            if (members.length > 0) {
+                var ids = lodash.map(members, '_id');
+                models.account.find({parent: {$in: ids}}, function (err, data) {
+                    if (err) return next(err);
+
+                    var group = lodash.groupBy(data, function (n) {
+                        return n.parent.toString();
+                    });
+
+                    console.log(JSON.stringify(group));
+
+                    members.forEach(function (item) {
+                        item.members = group[item._id.toString()] ? group[item._id.toString()].length : 0;
+                    });
+
+                    return res.render('account/member', {
+                        title: '我的下级会员',
+                        members: members,
+                        deep: true
+                    })
+                });
+            } else {
+                return res.render('account/member', {
+                    title: '我的下级会员',
+                    members: members,
+                    deep: true
+                })
+            }
         });
     }
 };
